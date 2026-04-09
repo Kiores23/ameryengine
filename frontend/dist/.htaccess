@@ -1,0 +1,10 @@
+<IfModule mod_mime.c>
+  AddType text/javascript .js .mjs
+  AddType text/css .css
+  AddType application/json .json
+  AddType application/wasm .wasm
+  AddType model/gltf-binary .glb
+  AddType model/gltf+json .gltf
+</IfModule>
+
+DirectoryIndex index.html
