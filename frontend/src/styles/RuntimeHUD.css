@@ -1,0 +1,136 @@
+/* ─── RuntimeHUD overlay ──────────────────────────────────────── */
+
+.runtime-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Key cap ─────────────────────────────────────────────────── */
+
+.hud-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 7px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.hud-key--wide {
+  min-width: 100px;
+}
+
+/* ─── Top-left hints ──────────────────────────────────────────── */
+
+.hud-top-left {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hud-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-hint span {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Bottom row ──────────────────────────────────────────────── */
+
+.hud-bottom {
+  position: absolute;
+  bottom: 18px;
+  left: 16px;
+  right: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+}
+
+.hud-bottom-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.hud-bottom-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+/* ─── Key group (WASD / ZQSD / arrows) ───────────────────────── */
+
+.hud-keys-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hud-keys-group--dim {
+  opacity: 0.3;
+}
+
+.hud-key-group-label {
+  font-family: monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+}
+
+.hud-key-row {
+  display: flex;
+  gap: 3px;
+}
+
+.hud-key-row--center {
+  justify-content: center;
+}
+
+.hud-keys-divider {
+  width: 1px;
+  height: 55px;
+  background: rgba(255, 255, 255, 0.15);
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+/* ─── Space bar ───────────────────────────────────────────────── */
+
+.hud-bottom-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  justify-self: center;
+}
+
+.hud-key-label {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}

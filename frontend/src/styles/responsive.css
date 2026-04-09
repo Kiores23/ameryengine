@@ -1,0 +1,57 @@
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* Écran moyen : on réduit les colonnes latérales */
+@media (max-width: 1400px) {
+  .main3 {
+    grid-template-columns: 280px 1fr 320px;
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Tablette : on passe en une seule colonne */
+@media (max-width: 1024px) {
+  .main3 {
+    grid-template-columns: 1fr;
+  }
+
+  .dock.left,
+  .dock.right {
+    border: none;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .toolbar {
+    padding: 0 8px;
+  }
+
+  .toolbar__left,
+  .toolbar__right,
+  .centerTop,
+  .actions,
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .panel__title,
+  .panel__body,
+  .panel__subbar,
+  .bottomDock {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

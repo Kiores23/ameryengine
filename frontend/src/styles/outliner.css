@@ -1,0 +1,239 @@
+/* =========================================================
+   OUTLINER / ARBORESCENCE
+   ========================================================= */
+
+/* Conteneur principal */
+.outliner {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  user-select: none;
+}
+
+/* Bloc racine */
+.rootBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+/* Groupe d'éléments */
+.ogroup {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.015);
+  flex-shrink: 0;
+}
+
+/* Zone des enfants */
+.obody {
+  padding: 2px 0 4px 0;
+  position: relative;
+}
+
+/* Indentation des lignes enfants */
+.obody .orow {
+  padding-left: 18px;
+}
+
+/* Ligne guide verticale */
+.obody::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Ligne générique */
+.orow {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease, opacity 0.14s ease;
+}
+
+.orow:hover {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* Header de groupe */
+.oheader {
+  height: 34px;
+  background: rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.oheader:hover {
+  background: rgba(255, 255, 255, 0.075);
+}
+
+/* Zone du caret */
+.ogutter {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+  opacity: 0.85;
+}
+
+.ocaret {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Espace réservé si pas de caret */
+.ocaret.spacer {
+  visibility: hidden;
+}
+
+/* Zone icône */
+.oicon {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.osvg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  opacity: 0.9;
+}
+
+/* Texte d'une ligne */
+.otext {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+/* Badge compteur */
+.obadge {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* Noeud générique */
+.onode {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Noeud sélectionné */
+.onode.active {
+  background: rgba(255, 79, 216, 0.10);
+  position: relative;
+}
+
+.onode.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(255, 79, 216, 0.65);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Sous-groupes */
+.osubgroup {
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.osubgroup--nested {
+  margin-left: 18px;
+}
+
+.osubheader {
+  height: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.osubheader--nested {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.osubheader:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.osubheader--nested:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.osubbody {
+  position: relative;
+  padding: 2px 0 2px 0;
+}
+
+.osubbody::before {
+  content: "";
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.onode--nested {
+  padding-left: 36px !important;
+}
+
+/* Variante Scene Objects — cohérente avec la DA magenta */
+
+.ogroup--scene {
+  border: 1px solid rgba(255, 79, 216, 0.22);
+  background: rgba(255, 79, 216, 0.08);
+}
+
+.oheader--scene {
+  background: rgba(255, 79, 216, 0.14);
+  border-bottom: 1px solid rgba(255, 79, 216, 0.18);
+}
+
+.oheader--scene:hover {
+  background: rgba(255, 79, 216, 0.20);
+}
+
+.osubheader--scene {
+  background: rgba(255, 79, 216, 0.10);
+  border-top: 1px solid rgba(255, 79, 216, 0.14);
+  border-bottom: 1px solid rgba(255, 79, 216, 0.14);
+}
+
+.osubheader--scene:hover {
+  background: rgba(255, 79, 216, 0.16);
+}

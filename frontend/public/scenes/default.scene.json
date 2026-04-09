@@ -1,0 +1,3559 @@
+{
+  "version": 1,
+  "objects": [
+    {
+      "name": "who_i_am",
+      "model": "who_i_am",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -1.5,
+          "y": 4.5,
+          "z": 1
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "box",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 3,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 17,
+          "y": 1,
+          "z": 17
+        }
+      }
+    },
+    {
+      "name": "box_1",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 2,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 20,
+          "y": 1,
+          "z": 20
+        }
+      }
+    },
+    {
+      "name": "box_2",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 23,
+          "y": 1,
+          "z": 23
+        }
+      }
+    },
+    {
+      "name": "box_3",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 26,
+          "y": 1,
+          "z": 26
+        }
+      }
+    },
+    {
+      "name": "box_4",
+      "model": "box",
+      "material": {
+        "color": "#8f8f8f",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 14,
+          "y": 1,
+          "z": 14
+        }
+      }
+    },
+    {
+      "name": "box_5",
+      "model": "box",
+      "material": {
+        "color": "#8f8f8f",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6.5,
+          "y": 6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 12
+        }
+      }
+    },
+    {
+      "name": "box_6",
+      "model": "box",
+      "material": {
+        "color": "#8f8f8f",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -6.5,
+          "y": 6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 12
+        }
+      }
+    },
+    {
+      "name": "box_7",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4.5,
+          "y": 6,
+          "z": -6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 5
+        }
+      }
+    },
+    {
+      "name": "box_8",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4.5,
+          "y": 6,
+          "z": 6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 5
+        }
+      }
+    },
+    {
+      "name": "ambient_light",
+      "model": "ambient_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 0.05
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "hemisphere_light",
+      "model": "hemisphere_light",
+      "material": {
+        "color": "#ff47ce",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 8.881784197001252e-16,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "box_9",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 4.5,
+          "y": 6,
+          "z": 6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 5
+        }
+      }
+    },
+    {
+      "name": "philosophy",
+      "model": "philosophy",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4,
+          "y": 4.5,
+          "z": -5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "box_10",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 4.5,
+          "y": 6,
+          "z": -6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 3,
+          "z": 5
+        }
+      }
+    },
+    {
+      "name": "box_11",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": -6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 4
+        }
+      }
+    },
+    {
+      "name": "box_12",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 7,
+          "z": -6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -90,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 4
+        }
+      }
+    },
+    {
+      "name": "point_light",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 5.5,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": -4.45,
+          "y": 5.95,
+          "z": -4.6000000000000005
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "couch",
+      "model": "couch",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.5,
+          "y": 4.5,
+          "z": -0.5
+        },
+        "rotation": {
+          "x": -180,
+          "y": 7.016709298534876e-15,
+          "z": -180
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "table",
+      "model": "table",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.5,
+          "y": 4.5,
+          "z": -3
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.8,
+          "y": 0.8,
+          "z": 0.8
+        }
+      }
+    },
+    {
+      "name": "painting",
+      "model": "painting",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.3000000000000003,
+          "y": 5.5,
+          "z": -5.8500000000000005
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "boardgames",
+      "model": "boardgames",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 5.5,
+          "y": 4.5,
+          "z": -5.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -29.999999999999996,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "basketball",
+      "model": "basketball",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 2,
+          "y": 4.5,
+          "z": -5.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "ritchie",
+      "model": "ritchie",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 4.2,
+          "y": 4.5,
+          "z": -5
+        },
+        "rotation": {
+          "x": 0,
+          "y": -14.999999999999998,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "interests",
+      "model": "interests",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.35,
+          "y": 5.2,
+          "z": -2.95
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_1",
+      "model": "point_light",
+      "material": {
+        "color": "#0039e6",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 26.650000000000002,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": 3.6,
+          "y": 5.5,
+          "z": -2.7
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_2",
+      "model": "point_light",
+      "material": {
+        "color": "#ff00ea",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 75,
+        "distance": 10
+      },
+      "transform": {
+        "position": {
+          "x": -1.5,
+          "y": 9,
+          "z": 1.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "other_gm",
+      "model": "other_gm",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 4,
+          "y": 4.5,
+          "z": 4
+        },
+        "rotation": {
+          "x": -180,
+          "y": -59.999999999999986,
+          "z": -180
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_3",
+      "model": "point_light",
+      "material": {
+        "color": "#ff0000",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 100,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": 5.5,
+          "y": 5,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "plane",
+      "model": "plane",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -0.5,
+          "z": -37.5
+        },
+        "rotation": {
+          "x": -90,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 45,
+          "y": 30,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "project_snapshot",
+      "model": "project_snapshot",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -7.5,
+          "y": -0.5,
+          "z": -20.260200711677484
+        },
+        "rotation": {
+          "x": -2.1400777704766742,
+          "y": 7.293244824538912,
+          "z": -1.9214442548328898
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "project_transcendence",
+      "model": "project_transcendence",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.75,
+          "z": -20
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.01,
+          "y": 0.01,
+          "z": 0.01
+        }
+      }
+    },
+    {
+      "name": "point_light_4",
+      "model": "point_light",
+      "material": {
+        "color": "#04ff00",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 11.150000000000002,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": 0.5,
+          "y": 1.5,
+          "z": -18
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "project_ml",
+      "model": "project_ml",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6,
+          "y": 0,
+          "z": -19.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2.3000000000000003,
+          "y": 2.3000000000000003,
+          "z": 2.3000000000000003
+        }
+      }
+    },
+    {
+      "name": "plane_1",
+      "model": "plane",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -0.5,
+          "z": 0
+        },
+        "rotation": {
+          "x": -90,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 45,
+          "y": 45,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_5",
+      "model": "point_light",
+      "material": {
+        "color": "#ff0000",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 8.45,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": 5.5,
+          "y": 1.7000000000000002,
+          "z": -17.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_6",
+      "model": "point_light",
+      "material": {
+        "color": "#0011ff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 23.7,
+        "distance": 10
+      },
+      "transform": {
+        "position": {
+          "x": -7,
+          "y": 2.5,
+          "z": -19.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "project_ggj",
+      "model": "project_ggj",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 11.5,
+          "y": -0.5,
+          "z": -19.053847164399816
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.4000000000000001,
+          "y": 1.4000000000000001,
+          "z": 1.4000000000000001
+        }
+      }
+    },
+    {
+      "name": "point_light_7",
+      "model": "point_light",
+      "material": {
+        "color": "#fff700",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 4.700000000000001,
+        "distance": 5
+      },
+      "transform": {
+        "position": {
+          "x": 11.593897825859976,
+          "y": 1,
+          "z": -18
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "project_amery_engine",
+      "model": "project_amery_engine",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 18.5,
+          "y": 0,
+          "z": -18
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2.7,
+          "y": 2.7,
+          "z": 2.7
+        }
+      }
+    },
+    {
+      "name": "point_light_8",
+      "model": "point_light",
+      "material": {
+        "color": "#fb00ff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 20.75,
+        "distance": 34
+      },
+      "transform": {
+        "position": {
+          "x": 18.5,
+          "y": 2,
+          "z": -17
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "exp_corys",
+      "model": "exp_corys",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -10,
+          "y": 1,
+          "z": -21.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "trains",
+      "model": "trains",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -11,
+          "y": -0.5,
+          "z": -32
+        },
+        "rotation": {
+          "x": -180,
+          "y": 60.000000000000036,
+          "z": -180
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_9",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 17.15,
+        "distance": 0
+      },
+      "transform": {
+        "position": {
+          "x": -7,
+          "y": 0.7000000000000001,
+          "z": -24.900000000000002
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_10",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 8.3,
+        "distance": 14
+      },
+      "transform": {
+        "position": {
+          "x": -11,
+          "y": 2,
+          "z": -21
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_unreal",
+      "model": "skill_unreal",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -15,
+          "y": 0,
+          "z": -28.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2.1,
+          "y": 2.1,
+          "z": 2.1
+        }
+      }
+    },
+    {
+      "name": "skill_blueprints",
+      "model": "skill_blueprints",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -18.323180721603126,
+          "y": 1.5,
+          "z": -33.5
+        },
+        "rotation": {
+          "x": -148.62702901826614,
+          "y": 7.156764733925509,
+          "z": -167.96885408977602
+        },
+        "scale": {
+          "x": 0.8,
+          "y": 0.8,
+          "z": 0.8
+        }
+      }
+    },
+    {
+      "name": "point_light_11",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 17.8,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -15,
+          "y": 2,
+          "z": -27
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_12",
+      "model": "point_light",
+      "material": {
+        "color": "#006eff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 25.35,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -18.60291219338611,
+          "y": 2,
+          "z": -32.11853347684254
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_unity",
+      "model": "skill_unity",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6,
+          "y": 0.5,
+          "z": -25.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.9000000000000001,
+          "y": 1.9000000000000001,
+          "z": 1.9000000000000001
+        }
+      }
+    },
+    {
+      "name": "point_light_13",
+      "model": "point_light",
+      "material": {
+        "color": "#ff0000",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 33.800000000000004,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 6.5,
+          "y": 2,
+          "z": -24.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_csharp",
+      "model": "skill_csharp",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3,
+          "y": 1.1500000000000001,
+          "z": -28.200000000000003
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.8,
+          "y": 1.8,
+          "z": 1.8
+        }
+      }
+    },
+    {
+      "name": "point_light_14",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 4.35,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 6.329607626951538,
+          "y": 2.5,
+          "z": -23
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_godot",
+      "model": "skill_godot",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 19.5,
+          "y": 0.5,
+          "z": -30.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.8,
+          "y": 1.8,
+          "z": 1.8
+        }
+      }
+    },
+    {
+      "name": "point_light_15",
+      "model": "point_light",
+      "material": {
+        "color": "#ff00d0",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 5.45,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 19.5,
+          "y": 0.5,
+          "z": -29.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_cpp",
+      "model": "skill_cpp",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4.5,
+          "y": 1,
+          "z": -28.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "point_light_16",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 3.6,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -4,
+          "y": 2.5,
+          "z": -27
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_c",
+      "model": "skill_c",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -0.6389709222228667,
+          "y": 1,
+          "z": -28.24949215980396
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "point_light_17",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 2.95,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -1,
+          "y": 2.5,
+          "z": -26.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_18",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 2.4000000000000004,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 3,
+          "y": 2.5,
+          "z": -26.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_ai",
+      "model": "skill_ai",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 7,
+          "y": 20,
+          "z": 50.5
+        },
+        "rotation": {
+          "x": 18.48690235298419,
+          "y": -171.37730906524638,
+          "z": 176.63938579695596
+        },
+        "scale": {
+          "x": 2.2,
+          "y": 2.2,
+          "z": 2.2
+        }
+      }
+    },
+    {
+      "name": "skill_js",
+      "model": "skill_js",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 1.372456537705226,
+          "y": 1,
+          "z": -22.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_python",
+      "model": "skill_python",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -2,
+          "y": 1,
+          "z": -22.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_19",
+      "model": "point_light",
+      "material": {
+        "color": "#fff700",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 3.4000000000000004,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 1.25,
+          "y": 1.5,
+          "z": -21
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_20",
+      "model": "point_light",
+      "material": {
+        "color": "#fff700",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 3.45,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -1.5,
+          "y": 1.5,
+          "z": -21.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_21",
+      "model": "point_light",
+      "material": {
+        "color": "#5a58fe",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 11.45,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -2,
+          "y": 2.25,
+          "z": -21.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_22",
+      "model": "point_light",
+      "material": {
+        "color": "#00ff33",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 25.85,
+        "distance": 22
+      },
+      "transform": {
+        "position": {
+          "x": -0.5,
+          "y": 2.5,
+          "z": -24.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_23",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 6.1000000000000005,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 6.38574425951497,
+          "y": 2,
+          "z": -24.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_git",
+      "model": "skill_git",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 10,
+          "y": 0.5,
+          "z": -29
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "point_light_24",
+      "model": "point_light",
+      "material": {
+        "color": "#ffc800",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 13.7,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 10,
+          "y": 1.5,
+          "z": -28
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_blender",
+      "model": "skill_blender",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 5,
+          "y": 0.5,
+          "z": -36
+        },
+        "rotation": {
+          "x": -101.24153397777118,
+          "y": -68.61040615907778,
+          "z": 177.5001209495691
+        },
+        "scale": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    },
+    {
+      "name": "point_light_25",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 3.6500000000000004,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 5,
+          "y": 1.5,
+          "z": -34.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_perforce",
+      "model": "skill_perforce",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -19,
+          "y": 1.5,
+          "z": -25.5
+        },
+        "rotation": {
+          "x": 74.99999999999999,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.30000000000000004,
+          "y": 0.30000000000000004,
+          "z": 0.30000000000000004
+        }
+      }
+    },
+    {
+      "name": "point_light_26",
+      "model": "point_light",
+      "material": {
+        "color": "#0033ff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 16.25,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -19.5,
+          "y": 1,
+          "z": -26.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_27",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 17.450000000000003,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -20,
+          "y": 3.5,
+          "z": -23.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_rider",
+      "model": "skill_rider",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -7,
+          "y": 2,
+          "z": -31.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.7000000000000002,
+          "y": 1.7000000000000002,
+          "z": 1.7000000000000002
+        }
+      }
+    },
+    {
+      "name": "point_light_28",
+      "model": "point_light",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 13.250000000000002,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -7,
+          "y": 3.5,
+          "z": -30
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "exp_42",
+      "model": "exp_42",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 14,
+          "y": 0,
+          "z": -24.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "point_light_29",
+      "model": "point_light",
+      "material": {
+        "color": "#ff66eb",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 3.9000000000000004,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 14.5,
+          "y": 1,
+          "z": -23
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "exp_ilec",
+      "model": "exp_ilec",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 13.5,
+          "y": 0,
+          "z": -34.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "point_light_30",
+      "model": "point_light",
+      "material": {
+        "color": "#fbff00",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 11.7,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 12.5,
+          "y": 2,
+          "z": -33
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_31",
+      "model": "point_light",
+      "material": {
+        "color": "#fff700",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 9.6,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": 11.5,
+          "y": 2,
+          "z": -23.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "seat",
+      "model": "seat",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4.5,
+          "y": 4.5,
+          "z": -3.7
+        },
+        "rotation": {
+          "x": -180,
+          "y": 45.000000000000014,
+          "z": -180
+        },
+        "scale": {
+          "x": 1.25,
+          "y": 1.25,
+          "z": 1.25
+        }
+      }
+    },
+    {
+      "name": "skill_architecture",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 6.550000000000001,
+          "z": 21.950000000000003
+        },
+        "rotation": {
+          "x": -119.99999999999999,
+          "y": 6.3611093629270335e-15,
+          "z": 87.87634582238357
+        },
+        "scale": {
+          "x": 2.6,
+          "y": 2.6,
+          "z": 2.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_1",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 4.3,
+          "z": 7.800000000000001
+        },
+        "rotation": {
+          "x": 89.99999999999999,
+          "y": 0,
+          "z": 21687.876345822384
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_2",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 4.3500000000000005,
+          "z": 9.25
+        },
+        "rotation": {
+          "x": -90,
+          "y": 1.5902773407317584e-15,
+          "z": 21671.376345822388
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_3",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 4.55,
+          "z": 10.65
+        },
+        "rotation": {
+          "x": 75,
+          "y": 1.5902773407317592e-15,
+          "z": 21687.876345822384
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_13",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 4.9,
+          "z": 13.700000000000001
+        },
+        "rotation": {
+          "x": -14.999999999999998,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 4.2
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_4",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 5.5,
+          "z": 16.6
+        },
+        "rotation": {
+          "x": 89.99999999999999,
+          "y": 0,
+          "z": 21687.876345822384
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_14",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 5.5,
+          "z": 18
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_5",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 5.5,
+          "z": 20
+        },
+        "rotation": {
+          "x": 59.99999999999999,
+          "y": 0,
+          "z": 87.87634582237469
+        },
+        "scale": {
+          "x": -2.5,
+          "y": -2.5,
+          "z": -2.5
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_6",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 1.75,
+          "y": 7.2,
+          "z": 23.25
+        },
+        "rotation": {
+          "x": 59.99999999999999,
+          "y": 0,
+          "z": 87.87634582237469
+        },
+        "scale": {
+          "x": -2.5,
+          "y": -2.5,
+          "z": -2.5
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_7",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -1.6500000000000001,
+          "y": 7.2,
+          "z": 23.450000000000003
+        },
+        "rotation": {
+          "x": 59.99999999999999,
+          "y": 0,
+          "z": 87.87634582237469
+        },
+        "scale": {
+          "x": -2.5,
+          "y": -2.5,
+          "z": -2.5
+        }
+      }
+    },
+    {
+      "name": "box_15",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.8000000000000003,
+          "y": 7.7,
+          "z": 26.1
+        },
+        "rotation": {
+          "x": -2.8926174404415828,
+          "y": 32.642707582257984,
+          "z": 3.386952009843738
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 4.2
+        }
+      }
+    },
+    {
+      "name": "box_16",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -3.6500000000000004,
+          "y": 7.800000000000001,
+          "z": 26.200000000000003
+        },
+        "rotation": {
+          "x": -3.0218441302053436,
+          "y": -36.286064307582556,
+          "z": 0.03628063828096932
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 4.2
+        }
+      }
+    },
+    {
+      "name": "skill_network",
+      "model": "skill_network",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0.4,
+          "y": 8.200000000000001,
+          "z": 30.85
+        },
+        "rotation": {
+          "x": 0,
+          "y": 90,
+          "z": 0
+        },
+        "scale": {
+          "x": -7.7,
+          "y": -7.7,
+          "z": -7.7
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_8",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 5.8500000000000005,
+          "y": 7.800000000000001,
+          "z": 29
+        },
+        "rotation": {
+          "x": 74.99999999999999,
+          "y": 0,
+          "z": 87.87634582238354
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_9",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6.3500000000000005,
+          "y": 7.800000000000001,
+          "z": 31
+        },
+        "rotation": {
+          "x": -90,
+          "y": -1.90833280887811e-14,
+          "z": -92.12365417761647
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_10",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6.5,
+          "y": 7.800000000000001,
+          "z": 33
+        },
+        "rotation": {
+          "x": 90.00000000000003,
+          "y": 30.00000000000001,
+          "z": 87.87634582238356
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_17",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 6.050000000000001,
+          "y": 9.200000000000001,
+          "z": 36.050000000000004
+        },
+        "rotation": {
+          "x": -41.18187510623812,
+          "y": -10.168692277298145,
+          "z": 5.031740468184825
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 4.49
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_11",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -6,
+          "y": 7.800000000000001,
+          "z": 29
+        },
+        "rotation": {
+          "x": 74.99999999999999,
+          "y": 0,
+          "z": 87.87634582238354
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_12",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -6.1000000000000005,
+          "y": 7.800000000000001,
+          "z": 31.1
+        },
+        "rotation": {
+          "x": -90,
+          "y": -1.90833280887811e-14,
+          "z": -92.12365417761647
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_13",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -6.2,
+          "y": 8,
+          "z": 33.1
+        },
+        "rotation": {
+          "x": 90.00000000000006,
+          "y": -29.999999999999986,
+          "z": 87.8763458223836
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_18",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -5.8500000000000005,
+          "y": 9.200000000000001,
+          "z": 36.1
+        },
+        "rotation": {
+          "x": -40.15894847016265,
+          "y": 7.152582383121949,
+          "z": 14.002184557582485
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 4.2
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_14",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -5.4,
+          "y": 10.8,
+          "z": 38.95
+        },
+        "rotation": {
+          "x": 90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_15",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -4.2,
+          "y": 10.8,
+          "z": 39.7
+        },
+        "rotation": {
+          "x": -90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_16",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -2.85,
+          "y": 10.8,
+          "z": 40.2
+        },
+        "rotation": {
+          "x": 90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_17",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 5.2,
+          "y": 10.8,
+          "z": 39.25
+        },
+        "rotation": {
+          "x": 90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_18",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 3.8000000000000003,
+          "y": 10.8,
+          "z": 39.75
+        },
+        "rotation": {
+          "x": -90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_19",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 2.4000000000000004,
+          "y": 10.8,
+          "z": 40.2
+        },
+        "rotation": {
+          "x": 90,
+          "y": 0,
+          "z": 90
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_math",
+      "model": "skill_math",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": -0.25,
+          "y": 10.4,
+          "z": 46.400000000000006
+        },
+        "rotation": {
+          "x": 0,
+          "y": 90,
+          "z": 0
+        },
+        "scale": {
+          "x": -3.1,
+          "y": -3.1,
+          "z": -3.1
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_20",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 12,
+          "z": 52.5
+        },
+        "rotation": {
+          "x": 44.99999999999998,
+          "y": 3.1805546814635168e-15,
+          "z": 89.99999999999997
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_21",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 13,
+          "z": 53.5
+        },
+        "rotation": {
+          "x": -135.76138673478022,
+          "y": -7.845902769432228,
+          "z": 77.17581301717165
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_22",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 14,
+          "z": 54.5
+        },
+        "rotation": {
+          "x": 44.99999999999998,
+          "y": 3.1805546814635168e-15,
+          "z": 89.99999999999997
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_19",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 14.5,
+          "z": 56.2
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_23",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 15.5,
+          "z": 57.85
+        },
+        "rotation": {
+          "x": 44.99999999999998,
+          "y": 3.1805546814635168e-15,
+          "z": 89.99999999999997
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_24",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 16.5,
+          "z": 58.85
+        },
+        "rotation": {
+          "x": -135.76138673478022,
+          "y": -7.845902769432228,
+          "z": 77.17581301717165
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "skill_architecture_25",
+      "model": "skill_architecture",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 17.55,
+          "z": 59.900000000000006
+        },
+        "rotation": {
+          "x": 44.99999999999998,
+          "y": 3.1805546814635168e-15,
+          "z": 89.99999999999997
+        },
+        "scale": {
+          "x": 1.6,
+          "y": 1.6,
+          "z": 1.6
+        }
+      }
+    },
+    {
+      "name": "box_20",
+      "model": "box",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 18.25,
+          "z": 61.25
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 0.5,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_gameplay",
+      "model": "skill_gameplay",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 17,
+          "z": 65.5
+        },
+        "rotation": {
+          "x": -180,
+          "y": 7.016709298534876e-15,
+          "z": -180
+        },
+        "scale": {
+          "x": 17,
+          "y": 17,
+          "z": 17
+        }
+      }
+    },
+    {
+      "name": "point_light_32",
+      "model": "point_light",
+      "material": {
+        "color": "#eabdff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 10000,
+        "distance": 10000
+      },
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 25.5,
+          "z": 64
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "point_light_33",
+      "model": "point_light",
+      "material": {
+        "color": "#001eff",
+        "roughness": 0.4,
+        "metalness": 0.1,
+        "intensity": 100,
+        "distance": 100
+      },
+      "transform": {
+        "position": {
+          "x": -0.25,
+          "y": 10.4,
+          "z": 46.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 7.5,
+          "y": 20.5,
+          "z": 52.35
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_1",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 8.200000000000001,
+          "y": 21.5,
+          "z": 53.85
+        },
+        "rotation": {
+          "x": 0,
+          "y": 59.99999999999999,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_2",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 9.9,
+          "y": 21.700000000000003,
+          "z": 54.95
+        },
+        "rotation": {
+          "x": -180,
+          "y": 60.00000000000002,
+          "z": -180
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_3",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 11.8,
+          "y": 21.5,
+          "z": 55.6
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": -15.000000000000002
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_4",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 13.3,
+          "y": 20.25,
+          "z": 56
+        },
+        "rotation": {
+          "x": 157.7923457014035,
+          "y": 20.704811054635446,
+          "z": -130.8933946491309
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_5",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 13.850000000000001,
+          "y": 18.35,
+          "z": 56.1
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": -74.99999999999999
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_6",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 13.5,
+          "y": 16.5,
+          "z": 56.6
+        },
+        "rotation": {
+          "x": 14.510818699069858,
+          "y": -43.079517141870944,
+          "z": -114.24642901631519
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_7",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 12.5,
+          "y": 14.8,
+          "z": 56.800000000000004
+        },
+        "rotation": {
+          "x": 165,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_8",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 10.850000000000001,
+          "y": 13.8,
+          "z": 57.300000000000004
+        },
+        "rotation": {
+          "x": 74.99999999999999,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_9",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 9.35,
+          "y": 13.5,
+          "z": 58.550000000000004
+        },
+        "rotation": {
+          "x": 59.99999999999999,
+          "y": 0,
+          "z": -45.00000000000001
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "skill_ai_corps_10",
+      "model": "skill_ai_corps",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 9.450000000000001,
+          "y": 13.850000000000001,
+          "z": 60.45
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": -45.00000000000001
+        },
+        "scale": {
+          "x": 2,
+          "y": 2,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "navmesh",
+      "model": "navmesh",
+      "material": {
+        "color": "#ffffff",
+        "roughness": 0.4,
+        "metalness": 0.1
+      },
+      "transform": {
+        "position": {
+          "x": 2,
+          "y": 0,
+          "z": 39.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 51,
+          "y": 39.400000000000006,
+          "z": 60.7
+        }
+      }
+    }
+  ]
+}

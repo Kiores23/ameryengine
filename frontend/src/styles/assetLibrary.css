@@ -1,0 +1,446 @@
+/* =========================================================
+   ASSET LIBRARY PANEL
+   Même langage visuel que Details
+   ========================================================= */
+
+/* ── Wrapper à ajouter dans App.jsx autour de tabContent + AssetLibrary
+   Ce wrapper est un flex column qui prend tout l'espace restant du .center
+   Le tabContent prend flex:1 (tout ce qui reste)
+   Le alPanel prend une hauteur fixe en px (pas en %)        ── */
+
+.viewportWithLibrary {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* hidden state no longer needed – slider handles visibility via overflow */
+
+.viewportWithLibrary--split .viewportMain {
+  flex: 0 0 50%;
+  min-height: 0;
+}
+
+.viewportWithLibrary--split .alPanel {
+  flex: 0 0 50%;
+  min-height: 0;
+}
+
+/* La zone du dessus prend tout l'espace quand l'AssetLibrary est fermé */
+.viewportMain {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.viewportMain > .tabContent {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Asset Library = exactement 50% du parent .viewportWithLibrary */
+.alPanel {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+}
+
+/* =========================================================
+   BARRE DE TITRE — identique à detailsPanelTitle
+   ========================================================= */
+
+.alPanelTitle {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(26, 21, 37, 0.80);
+  font-weight: 600;
+  font-size: 13px;
+  min-height: 42px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.alPanelTitle__label {
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  color: var(--text);
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alPanelTitle__nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Bouton ← — copie exacte de .detailsNavBtn */
+.alNavBtn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease,
+    opacity 140ms ease;
+}
+
+.alNavBtn:hover:not(:disabled) {
+  background: rgba(255, 79, 216, 0.12);
+  border-color: rgba(255, 79, 216, 0.22);
+}
+
+.alNavBtn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.alNavBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* =========================================================
+   HERO STRIP — version compacte de details__hero
+   ========================================================= */
+
+.alHero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 79, 216, 0.10), rgba(255, 79, 216, 0.03)),
+    rgba(255, 255, 255, 0.015);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: alHeroIntro 350ms ease-out both;
+}
+
+.alHero__glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: -50px;
+  top: -70px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 79, 216, 0.22) 0%,
+    rgba(255, 79, 216, 0.00) 70%
+  );
+  filter: blur(20px);
+  animation: alGlowFloat 8s ease-in-out infinite;
+}
+
+.alHero__highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.alHero__highlight::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -35%;
+  width: 42%;
+  height: 160%;
+  transform: rotate(12deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  opacity: 0;
+  animation: alShimmer 1.4s ease-out 0.05s 1 forwards;
+}
+
+.alHero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.alHero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.alHero__eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 79, 216, 0.9);
+}
+
+.alHero__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.alHero__sub {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.alBreadcrumb {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.alBreadcrumb__link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: inherit;
+  color: var(--muted);
+  transition: color 120ms;
+}
+
+.alBreadcrumb__link:hover { color: var(--text); }
+
+.alBreadcrumb__active {
+  color: rgba(255, 79, 216, 0.9);
+  font-weight: 600;
+}
+
+.alBreadcrumb__sep {
+  color: var(--muted);
+  opacity: 0.4;
+}
+
+.alInlineHint {
+  padding: 10px 12px;
+  margin: 8px 10px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 79, 216, 0.15);
+  background: rgba(255, 79, 216, 0.05);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.alInlineHint strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.alInlineHint {
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,79,216,0.25);
+}
+
+/* =========================================================
+   BODY SCROLLABLE
+   ========================================================= */
+
+.alBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+}
+
+.alBody::-webkit-scrollbar { width: 8px; }
+.alBody::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 999px;
+}
+.alBody::-webkit-scrollbar-thumb {
+  background: rgba(255, 79, 216, 0.18);
+  border-radius: 999px;
+}
+.alBody::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 79, 216, 0.28);
+}
+
+/* =========================================================
+   GRILLE DOSSIERS
+   ========================================================= */
+
+.alFoldersGrid,
+.alAssetsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.alFolderCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  color: var(--text);
+  text-align: center;
+  transition: background 140ms, border-color 140ms, transform 120ms, box-shadow 140ms;
+  min-height: 118px;
+}
+
+.alFolderCard:hover {
+  background: rgba(255, 79, 216, 0.07);
+  border-color: rgba(255, 79, 216, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(255, 79, 216, 0.07);
+}
+
+.alFolderCard:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.alFolderSvg {
+  width: 56px;
+  height: 46px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.alFolderCard__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.alFolderCard__count {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* =========================================================
+   GRILLE ASSETS
+   ========================================================= */
+
+.alAssetsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+.alAssetCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 6px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+  cursor: grab;
+  color: var(--text);
+  text-align: center;
+  user-select: none;
+  transition: background 140ms, border-color 140ms, transform 120ms, box-shadow 140ms;
+  min-height: 118px;
+}
+
+.alAssetCard:hover {
+  background: rgba(255, 79, 216, 0.07);
+  border-color: rgba(255, 79, 216, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 79, 216, 0.08);
+}
+
+.alAssetCard:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+  border-color: rgba(255, 79, 216, 0.42);
+  background: rgba(255, 79, 216, 0.12);
+}
+
+.alAssetCard__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.alAssetCard__meta {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.alAssetCard__dragHint {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 10px;
+  color: rgba(255, 79, 216, 0.45);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.alAssetCard:hover .alAssetCard__dragHint { opacity: 1; }
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes alHeroIntro {
+  0%   { opacity: 0; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes alGlowFloat {
+  0%   { transform: translate(0, 0) scale(1);        opacity: 0.7;  }
+  33%  { transform: translate(16px, 8px) scale(1.06); opacity: 0.95; }
+  66%  { transform: translate(30px, 16px) scale(0.96);opacity: 0.65; }
+  100% { transform: translate(0, 0) scale(1);        opacity: 0.7;  }
+}
+
+@keyframes alShimmer {
+  0%   { transform: translateX(0) rotate(12deg);    opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateX(340%) rotate(12deg); opacity: 0; }
+}	

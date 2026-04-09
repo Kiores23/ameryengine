@@ -1,0 +1,208 @@
+/* =========================================================
+   PANNEAU EDIT
+   ========================================================= */
+
+.editCard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Utilise déjà le même header que Details */
+/* .details__header */
+/* .details__headerMain */
+/* .details__eyebrow */
+/* .details__title */
+/* .details__type */
+
+.editTransform {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.xformTitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  opacity: 0.85;
+  margin: 0 0 2px 0;
+}
+
+/* ── Ligne propriété ──────────────────────────────────── */
+.xformRow {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+
+.xformLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+  padding-top: 20px; /* aligne visuellement avec les champs sous X/Y/Z */
+}
+
+/* ── Zone inputs ─────────────────────────────────────── */
+.xformInputs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ── Axe wrapper ─────────────────────────────────────── */
+.xformAxis {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.xformAxis__label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  color: var(--muted);
+  text-align: center;
+  user-select: none;
+}
+
+/* ── Champ draggable ─────────────────────────────────── */
+.xformField {
+  position: relative;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    transform 120ms ease;
+  cursor: ew-resize;
+}
+
+.xformField:hover,
+.xformField:focus-within {
+  border-color: rgba(255, 79, 216, 0.30);
+  background: rgba(255, 79, 216, 0.06);
+}
+
+.xformField.dragging {
+  border-color: rgba(255, 79, 216, 0.45);
+  background: rgba(255, 79, 216, 0.10);
+}
+
+.xformField.editing {
+  cursor: text;
+}
+
+.xformField__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  text-align: center;
+  padding: 0 8px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  cursor: inherit;
+}
+
+.xformField__input::-webkit-outer-spin-button,
+.xformField__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.xformField.editing .xformField__input {
+  cursor: text;
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+  .xformRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .xformLabel {
+    padding-top: 0;
+  }
+}
+
+/* =========================================================
+   MATERIAL / LIGHT CARDS
+   ========================================================= */
+
+.editMaterial,
+.editLight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Color picker row ─────────────────────────────────── */
+.xformInputs--color {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.colorPicker {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 36px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+}
+
+.colorPicker::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.colorPicker::-webkit-color-swatch {
+  border: none;
+  border-radius: 8px;
+}
+
+.colorPicker::-moz-color-swatch {
+  border: none;
+  border-radius: 8px;
+}
+
+.colorPicker:hover {
+  border-color: rgba(255, 79, 216, 0.30);
+}
+
+.colorHex {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  user-select: all;
+}
+
+/* ── Single value input (intensity) ───────────────────── */
+.xformInputs--single {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+  max-width: 120px;
+}

@@ -1,0 +1,60 @@
+
+# Environment
+.env
+.env.local
+*.pyc
+
+# Docker
+docker-compose.override.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Django
+db.sqlite3
+/media/
+/static/
+.coverage
+
+# Frontend
+frontend/node_modules/
+frontend/.node_modules_root_stale/
+frontend/dist/
+frontend/.dist_root_stale/
+frontend/.vite/
+frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Nginx
+nginx/.certbot/
+nginx/ssl/*.crt
+nginx/ssl/*.key
+nginx/ssl/*.pem
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+pixelstreaming/
+infra/

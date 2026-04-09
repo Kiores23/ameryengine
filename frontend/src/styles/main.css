@@ -1,0 +1,95 @@
+@import "./variables.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./media.css";
+@import "./components.css";
+@import "./outliner.css";
+@import "./workspace.css";
+@import "./assetLibrary.css";
+@import "./forms.css";
+@import "./details.css";
+@import "./responsive.css";
+@import "./edit.css";
+@import "./keybindingsConfig.css";
+@import "./shortcutsModal.css";
+@import "./loadingScreen.css";
+
+/* Scrollbar globale */
+.outliner,
+.panel__body,
+.mediaThumbs {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,79,216,0.35) transparent;
+}
+
+/* Chrome / Edge / Safari */
+
+.outliner::-webkit-scrollbar,
+.panel__body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.outliner::-webkit-scrollbar-track,
+.panel__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.outliner::-webkit-scrollbar-thumb,
+.panel__body::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.15s ease;
+}
+
+.outliner::-webkit-scrollbar-thumb:hover,
+.panel__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,79,216,0.35);
+}
+
+.outliner::-webkit-scrollbar-thumb:active,
+.panel__body::-webkit-scrollbar-thumb:active {
+  background: rgba(255,79,216,0.55);
+}
+
+.fileMenuWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 5100;
+}
+
+.fileMenuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 180px;
+  background: #15151b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  z-index: 5200;
+  pointer-events: auto;
+}
+
+.fileMenuItem {
+  width: 100%;
+  display: block;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fileMenuItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn.active {
+  background: rgba(255, 255, 255, 0.12);
+}

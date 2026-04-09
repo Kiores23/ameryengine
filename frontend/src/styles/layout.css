@@ -1,0 +1,125 @@
+  /* =========================================================
+    STRUCTURE GÉNÉRALE DE L'APPLICATION
+    ========================================================= */
+
+  .app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  } 
+
+  /* Zone principale en 3 colonnes */
+  .main3 {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 320px 1fr 360px;
+    grid-template-rows: 1fr;
+    min-height: 0;
+    position: relative;
+  }
+
+  /* Viewport plein écran en mode runtime */
+  .main3--runtime {
+    grid-template-columns: 0 1fr 0;
+  }
+
+  .main3--runtime .dock {
+    overflow: hidden;
+    padding: 0;
+    border: none;
+  }
+
+  .main3--runtime .centerTop {
+    display: none;
+  }
+
+  .center {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Colonnes latérales */
+  .dock {
+    padding: 10px;
+    min-height: 0;
+  }
+
+  .dock.left {
+    border-right: 1px solid var(--line);
+  }
+
+  .dock.right {
+    border-left: 1px solid var(--line);
+  }
+
+  /* Colonne centrale */
+  /* (déjà déclarée plus haut) */
+
+  .centerTop {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    z-index: 1;
+  }
+
+  /* Barre du haut */
+  .toolbar {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+    z-index: 5000;
+  }
+  
+  .toolbar__left,
+  .toolbar__right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 5001;
+  }
+
+  .toolbar button,
+  .toolbar .chip,
+  .toolbar .badge,
+  .toolbar .item {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .logo {
+    height: 36px;
+    width: auto;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* Barre du bas */
+  .statusbar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .sep {
+    opacity: 0.6;
+  }

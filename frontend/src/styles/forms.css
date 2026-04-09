@@ -1,0 +1,275 @@
+/* =========================================================
+   FORMULAIRES / CONTACT / TRANSFORM
+   ========================================================= */
+
+/* Formulaire de contact */
+.contactWrap {
+  height: 100%;
+  min-height: 0;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.contactShell {
+  width: min(920px, 100%);
+  display: grid;
+  gap: 16px;
+}
+
+.contactHeader {
+  padding: 18px;
+  border: 1px solid rgba(255, 79, 216, 0.20);
+  border-radius: 8px;
+  background: rgba(21, 17, 29, 0.62);
+}
+
+.contactEyebrow {
+  margin: 0 0 8px;
+  color: var(--accent2);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contactHeader h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.contactHeader p {
+  max-width: 680px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(280px, 1.15fr);
+  gap: 16px;
+  min-width: 0;
+}
+
+.contactCard,
+.contactForm {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(21, 17, 29, 0.70);
+}
+
+.contactCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: start;
+}
+
+.contactCard__label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+}
+
+.contactEmail {
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.contactEmail:hover {
+  color: var(--accent2);
+}
+
+.contactSocials {
+  display: grid;
+  gap: 10px;
+}
+
+.contactSocialLink {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid rgba(255, 79, 216, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 79, 216, 0.08);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.contactSocialLink:hover {
+  border-color: rgba(255, 79, 216, 0.38);
+  background: rgba(255, 79, 216, 0.14);
+  transform: translateY(-1px);
+}
+
+.contactSocialLink span {
+  font-weight: 700;
+}
+
+.contactSocialLink small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.contactForm {
+  display: grid;
+  gap: 12px;
+}
+
+.contactField {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(242, 238, 248, 0.14);
+  border-radius: 8px;
+  background: rgba(26, 21, 37, 0.82);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.contactForm input::placeholder,
+.contactForm textarea::placeholder {
+  color: rgba(191, 179, 214, 0.68);
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  border-color: rgba(255, 79, 216, 0.45);
+  background: rgba(26, 21, 37, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 79, 216, 0.10);
+}
+
+.contactForm textarea {
+  resize: vertical;
+  min-height: 138px;
+}
+
+.contactSubmit {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 79, 216, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 79, 216, 0.18);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.2;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.contactSubmit:hover {
+  border-color: rgba(255, 79, 216, 0.55);
+  background: rgba(255, 79, 216, 0.26);
+}
+
+.contactSubmit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.contactStatus {
+  min-height: 18px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .contactWrap {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .contactGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contactHeader h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-height: 720px) {
+  .contactWrap {
+    align-items: flex-start;
+  }
+}
+
+/* Panneau de transformation */
+.xform {
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.xformTitle {
+  font-weight: 700;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.xformRow {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.xformLabel {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+.xformInputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.xformInput {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+}
