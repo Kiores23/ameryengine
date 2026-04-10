@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { createBasicShape } from "./modelRegistry/basicShapes/index.js";
 import { createAiHelperModel, configureAiModel } from "./modelRegistry/ai/index.js";
 import { createLight } from "./modelRegistry/lights/index.js";
@@ -7,6 +9,18 @@ import { disposeObject3D } from "../engine/objectDisposal";
 import { resolvePublicPath } from "../../utils/publicPath";
 
 const loader = new GLTFLoader();
+let ktx2Loader = null;
+
+loader.setMeshoptDecoder(MeshoptDecoder);
+
+export function initModelRegistryLoader(renderer) {
+  if (!renderer || ktx2Loader) return;
+
+  ktx2Loader = new KTX2Loader();
+  ktx2Loader.setTranscoderPath(resolvePublicPath("basis/"));
+  ktx2Loader.detectSupport(renderer);
+  loader.setKTX2Loader(ktx2Loader);
+}
 
 // Cache parsed GLTF for static models (no animations).
 // Animated models (SkinnedMesh) must be re-parsed each time.

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import { setupScene } from "./scene/setupScene";
-import { clearModelRegistryCache } from "./scene/modelRegistry";
+import { clearModelRegistryCache, initModelRegistryLoader } from "./scene/modelRegistry";
 import {
   clearRuntimeObjects,
   generateUniqueObjectNameFromModel,
@@ -43,6 +43,7 @@ export async function createViewportEngine(canvas) {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.shadowMap.autoUpdate = false;
   state.renderer = renderer;
+  initModelRegistryLoader(renderer);
 
   const dom = renderer.domElement;
 
