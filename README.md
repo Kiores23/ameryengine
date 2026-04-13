@@ -43,6 +43,32 @@ Le build sort dans `frontend/dist/`.
 
 Le projet utilise une base relative en production, donc il peut etre deploie a la racine d'un domaine IONOS ou dans un sous-dossier.
 
+## Test local avec Nginx
+
+Un Nginx minimal de test est fourni pour servir exactement le contenu de `frontend/dist/` via Docker.
+
+Demarrage :
+
+```bash
+./scripts/serve-static-nginx.sh
+```
+
+Demarrage avec rebuild force :
+
+```bash
+REBUILD=1 ./scripts/serve-static-nginx.sh
+```
+
+Le site sera disponible sur `http://127.0.0.1:8080`.
+
+Arret :
+
+```bash
+./scripts/stop-static-nginx.sh
+```
+
+La config Nginx utilisee se trouve dans [local-nginx/default.conf](/home/amery/Projects/porfolio/local-nginx/default.conf).
+
 ## Deploiement IONOS
 
 1. Lance le build de production.

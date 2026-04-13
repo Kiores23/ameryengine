@@ -12,7 +12,7 @@ import { resizeRendererToCanvas } from "./utils/resizeRendererToCanvas";
 
 import { createEngineState } from "./engine/engineState";
 import { updateAnimationMixers } from "./engine/animation";
-import { updateCameraFocus } from "./engine/cameraFocus";
+import { syncFocusWithCamera, updateCameraFocus } from "./engine/cameraFocus";
 import { clearHighlight } from "./engine/highlight";
 import {
   disposeSceneChildren,
@@ -56,6 +56,7 @@ export async function createViewportEngine(canvas) {
 
   const controls = new OrbitControls(camera, dom);
   controls.enableDamping = true;
+  controls.enableZoom = true;
   controls.mouseButtons = {
     LEFT: null,
     MIDDLE: THREE.MOUSE.DOLLY,
@@ -63,6 +64,11 @@ export async function createViewportEngine(canvas) {
   };
   controls.target.set(0, 1, 0);
   state.controls = controls;
+
+  function syncViewerFocusFromWheel() {
+    if (isEditorMode || runtimeController.isActive()) return;
+    syncFocusWithCamera(state, camera, controls);
+  }
 
   await setupScene({
     scene,
@@ -90,6 +96,8 @@ export async function createViewportEngine(canvas) {
   let isEditorMode = false;
   let editorModeBeforeRuntime = false;
   let selectedObjectName = null;
+
+  dom.addEventListener("wheel", syncViewerFocusFromWheel, { passive: true });
 
   const autoRotateController = createAutoRotateController({
     camera,
@@ -338,6 +346,7 @@ export async function createViewportEngine(canvas) {
       state.transformChangeListeners.clear();
 
       transformControlsController.dispose();
+      dom.removeEventListener("wheel", syncViewerFocusFromWheel);
       controls.dispose();
 
       clearRuntimeObjects(scene, state.objectsByName);

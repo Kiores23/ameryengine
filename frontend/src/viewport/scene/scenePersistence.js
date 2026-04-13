@@ -37,6 +37,13 @@ export function validateSceneData(data) {
     throw new Error("Scene data invalide : objet attendu.");
   }
 
+  if (
+    data.modelDefaults != null &&
+    (typeof data.modelDefaults !== "object" || Array.isArray(data.modelDefaults))
+  ) {
+    throw new Error("Scene data invalide : 'modelDefaults' doit être un objet.");
+  }
+
   if (!Array.isArray(data.objects)) {
     throw new Error("Scene data invalide : 'objects' doit être un tableau.");
   }

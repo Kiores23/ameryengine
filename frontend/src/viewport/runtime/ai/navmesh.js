@@ -9,6 +9,19 @@ const _localPadding = new THREE.Vector3();
 const _clampedLocalPoint = new THREE.Vector3();
 const _closestPoint = new THREE.Vector3();
 
+function getScaledBoundingRadius(obj) {
+  const baseRadius = obj?.userData?.boundingRadius;
+  if (Number.isFinite(baseRadius) && baseRadius > 0) {
+    return baseRadius * Math.max(
+      Math.abs(obj.scale.x),
+      Math.abs(obj.scale.y),
+      Math.abs(obj.scale.z),
+    );
+  }
+
+  return null;
+}
+
 function updateLocalPadding(navmesh, paddingWorld) {
   navmesh.getWorldScale(_navScale);
   _localPadding.set(
@@ -84,6 +97,11 @@ export function pickRandomPointInNavmesh(navmesh, paddingWorld, out) {
 }
 
 export function getAiRadius(ai) {
+  const cachedRadius = getScaledBoundingRadius(ai);
+  if (cachedRadius != null) {
+    return Math.max(SKILL_AI_NAVMESH_PADDING, cachedRadius * 0.45);
+  }
+
   _aiBox.setFromObject(ai);
   _aiBox.getBoundingSphere(_aiSphere);
   return Math.max(SKILL_AI_NAVMESH_PADDING, _aiSphere.radius * 0.45);

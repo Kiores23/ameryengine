@@ -241,6 +241,8 @@ export default function App() {
     setRuntimeMode(false);
   }
 
+  const isLoading = !!loadingProgress;
+
   return (
     <div className="app">
       <header className="toolbar">
@@ -248,45 +250,49 @@ export default function App() {
           <img src={logo} alt="Logo" className="logo" />
           <span className="brand">AMery Engine</span>
 
-          <button
-            className="btn btn--ghost"
-            aria-pressed={editorMode}
-            onClick={() => { exitRuntime(); setEditorMode((v) => !v); }}
-          >
-            {editorMode ? "Editor Mode ✓" : "Editor Mode"}
-          </button>
+          {!isLoading && (
+            <>
+              <button
+                className="btn btn--ghost"
+                aria-pressed={editorMode}
+                onClick={() => { exitRuntime(); setEditorMode((v) => !v); }}
+              >
+                {editorMode ? "Editor Mode ✓" : "Editor Mode"}
+              </button>
 
-          <EditorFileMenu
-            editorMode={editorMode && !runtimeMode}
-            onFilePicked={(e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              importSceneFile(file);
-            }}
-            onSaveClick={exportCurrentScene}
-          />
+              <EditorFileMenu
+                editorMode={editorMode && !runtimeMode}
+                onFilePicked={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  importSceneFile(file);
+                }}
+                onSaveClick={exportCurrentScene}
+              />
 
-          <button
-            className={"btn btn--ghost" + (runtimeMode ? " active" : "")}
-            onClick={(e) => {
-              if (runtimeMode) {
-                viewportApiRef.current?.stopRuntime?.();
-                setRuntimeMode(false);
-              } else {
-                const ok = viewportApiRef.current?.startRuntime?.("who_i_am", () => {
-                  setRuntimeMode(false);
-                }, {
-                  onLayoutChange: setRuntimeLayout,
-                  onCursorLockChange: setRuntimeCursorLocked,
-                });
-                if (ok) { setRuntimeMode(true); setActiveTab(TAB_VIEWPORT); }
-              }
-              e.currentTarget.blur();
-            }}
-            title={runtimeMode ? "Stop" : "Play"}
-          >
-            {runtimeMode ? "■" : "▶"}
-          </button>
+              <button
+                className={"btn btn--ghost" + (runtimeMode ? " active" : "")}
+                onClick={(e) => {
+                  if (runtimeMode) {
+                    viewportApiRef.current?.stopRuntime?.();
+                    setRuntimeMode(false);
+                  } else {
+                    const ok = viewportApiRef.current?.startRuntime?.("who_i_am", () => {
+                      setRuntimeMode(false);
+                    }, {
+                      onLayoutChange: setRuntimeLayout,
+                      onCursorLockChange: setRuntimeCursorLocked,
+                    });
+                    if (ok) { setRuntimeMode(true); setActiveTab(TAB_VIEWPORT); }
+                  }
+                  e.currentTarget.blur();
+                }}
+                title={runtimeMode ? "Stop" : "Play"}
+              >
+                {runtimeMode ? "■" : "▶"}
+              </button>
+            </>
+          )}
         </div>
 
         <div className="toolbar__right">
@@ -303,9 +309,11 @@ export default function App() {
             CV
           </a>
 
-          <button className="btn" onClick={() => { exitRuntime(); setActiveTab(TAB_CONTACT); }}>
-            Contact me
-          </button>
+          {!isLoading && (
+            <button className="btn" onClick={() => { exitRuntime(); setActiveTab(TAB_CONTACT); }}>
+              Contact me
+            </button>
+          )}
         </div>
       </header>
 

@@ -1,7 +1,10 @@
 import * as THREE from "three";
-import { createDefaultModel, clearModelRegistryCache } from "./modelRegistry";
+import { createDefaultModel, warmModelCache } from "./modelRegistry";
 import { MAX_SHADOW_LIGHTS } from "./modelRegistry/lights/index.js";
 import { disposeObject3D } from "../engine/objectDisposal";
+
+const OBJECT_LOAD_CONCURRENCY = 8;
+const PRELOAD_CONCURRENCY = 4;
 
 function degToRad(v) {
   return THREE.MathUtils.degToRad(Number(v) || 0);
@@ -61,14 +64,168 @@ export function generateUniqueObjectNameFromModel(modelName, nameSource) {
   return `${baseName}_${index}`;
 }
 
+function mergeNestedObject(defaultValue, overrideValue) {
+  if (!defaultValue && !overrideValue) return undefined;
+  return {
+    ...(defaultValue ?? {}),
+    ...(overrideValue ?? {}),
+  };
+}
+
+function mergeTransforms(defaultTransform, transform) {
+  if (!defaultTransform && !transform) return undefined;
+
+  return {
+    ...(defaultTransform ?? {}),
+    ...(transform ?? {}),
+    position: mergeNestedObject(defaultTransform?.position, transform?.position),
+    rotation: mergeNestedObject(defaultTransform?.rotation, transform?.rotation),
+    scale: mergeNestedObject(defaultTransform?.scale, transform?.scale),
+  };
+}
+
+function mergeDescriptorWithDefaults(defaults = {}, desc = {}) {
+  return {
+    ...defaults,
+    ...desc,
+    material: mergeNestedObject(defaults.material, desc.material),
+    transform: mergeTransforms(defaults.transform, desc.transform),
+    runtime: mergeNestedObject(defaults.runtime, desc.runtime),
+    shadows: mergeNestedObject(defaults.shadows, desc.shadows),
+  };
+}
+
+function copySceneOptions(desc) {
+  const options = {};
+
+  if (desc.runtime) {
+    options.runtime = { ...desc.runtime };
+  }
+
+  if (desc.shadows) {
+    options.shadows = { ...desc.shadows };
+  }
+
+  if (desc.visible === false) {
+    options.visible = false;
+  }
+
+  return options;
+}
+
+function hasOwnKeys(value) {
+  return !!value && Object.keys(value).length > 0;
+}
+
+function markObjectNonCollidable(obj) {
+  obj.userData.excludeFromRuntimeCollisions = true;
+
+  if (obj.userData.collisionProxy) {
+    obj.userData.collisionProxy.userData.excludeFromRuntimeCollisions = true;
+  }
+
+  obj.traverse?.((child) => {
+    if (!child.isMesh) return;
+    child.userData.excludeFromRuntimeCollisions = true;
+  });
+}
+
+function applyObjectShadowSettings(obj, shadowOptions = {}) {
+  const options = shadowOptions ?? {};
+
+  if (obj.isLight && obj.shadow && options.cast != null) {
+    obj.castShadow = !!options.cast;
+  }
+
+  obj.traverse?.((child) => {
+    if (!child.isMesh) return;
+    if (child.userData.isCollisionProxy) return;
+
+    if (child.userData.skipSceneShadows) {
+      child.receiveShadow = false;
+      child.castShadow = false;
+      return;
+    }
+
+    child.receiveShadow = options.receive ?? true;
+    child.castShadow = options.cast ?? true;
+  });
+}
+
+function normalizeSceneObjects(sceneData) {
+  const modelDefaults = sceneData?.modelDefaults ?? {};
+  const assignedNames = new Set();
+
+  return (sceneData?.objects ?? []).map((rawDesc) => {
+    const desc = mergeDescriptorWithDefaults(modelDefaults?.[rawDesc?.model], rawDesc);
+    const name = generateUniqueObjectNameFromModel(desc?.model, assignedNames);
+    assignedNames.add(name);
+
+    return {
+      ...desc,
+      name,
+    };
+  });
+}
+
+async function preloadRepeatedModels(objects, onProgress) {
+  const modelCounts = new Map();
+  for (const desc of objects) {
+    const model = desc?.model;
+    if (!model) continue;
+    modelCounts.set(model, (modelCounts.get(model) ?? 0) + 1);
+  }
+
+  const repeatedModels = Array.from(modelCounts.entries())
+    .filter(([, count]) => count > 1)
+    .map(([model]) => model);
+
+  if (repeatedModels.length === 0) return;
+
+  let warmed = 0;
+  onProgress?.({
+    phase: `Priming shared models (${warmed}/${repeatedModels.length})`,
+    loaded: 54,
+    total: 100,
+  });
+
+  let nextIndex = 0;
+  const workers = Array.from({
+    length: Math.min(PRELOAD_CONCURRENCY, repeatedModels.length),
+  }, async () => {
+    while (nextIndex < repeatedModels.length) {
+      const currentIndex = nextIndex++;
+      const model = repeatedModels[currentIndex];
+
+      try {
+        await warmModelCache(model);
+      } finally {
+        warmed += 1;
+        onProgress?.({
+          phase: `Priming shared models (${warmed}/${repeatedModels.length})`,
+          loaded: 54,
+          total: 100,
+        });
+      }
+    }
+  });
+
+  await Promise.all(workers);
+}
+
 export async function createObjectFromDescriptor(desc) {
-  const mesh = await createDefaultModel(desc.model, desc.material);
+  const mesh = await createDefaultModel(desc.model, desc.material, desc);
 
   mesh.name = desc.name || normalizeObjectNameBase(desc.model);
   mesh.userData.sceneModel = desc.model || "box";
   mesh.userData.sceneMaterial = { ...(desc.material ?? {}) };
+  mesh.userData.sceneOptions = copySceneOptions(desc);
 
   applyTransform(mesh, desc.transform);
+
+  if (desc.visible === false) {
+    mesh.visible = false;
+  }
 
   // Apply light-specific properties
   if (mesh.isLight) {
@@ -77,19 +234,11 @@ export async function createObjectFromDescriptor(desc) {
     if (desc.material?.distance != null && mesh.distance !== undefined) mesh.distance = Number(desc.material.distance);
   }
 
-  // Enable shadows on meshes selectively
-  // Small meshes and collision proxies skip castShadow to save GPU
-  mesh.traverse?.((child) => {
-    if (!child.isMesh) return;
-    if (child.userData.isCollisionProxy) return;
-    if (child.userData.skipSceneShadows) {
-      child.receiveShadow = false;
-      child.castShadow = false;
-      return;
-    }
-    child.receiveShadow = true;
-    child.castShadow = true;
-  });
+  if (desc.runtime?.collidable === false) {
+    markObjectNonCollidable(mesh);
+  }
+
+  applyObjectShadowSettings(mesh, desc.shadows);
 
   return mesh;
 }
@@ -118,18 +267,7 @@ export function clearRuntimeObjects(scene, objectsByName) {
 
 export async function loadSceneFromData(scene, objectsByName, sceneData, onProgress) {
   clearRuntimeObjects(scene, objectsByName);
-  clearModelRegistryCache();
-
-  const assignedNames = new Set();
-  const objects = (sceneData?.objects ?? []).map((desc) => {
-    const name = generateUniqueObjectNameFromModel(desc?.model, assignedNames);
-    assignedNames.add(name);
-
-    return {
-      ...desc,
-      name,
-    };
-  });
+  const objects = normalizeSceneObjects(sceneData);
   const total = objects.length;
   let loaded = 0;
   const LOADING_START = 55;
@@ -146,25 +284,31 @@ export async function loadSceneFromData(scene, objectsByName, sceneData, onProgr
     onProgress?.({ phase, loaded: pct, total: 100 });
   }
 
+  await preloadRepeatedModels(objects, onProgress);
   emitWeightedProgress("Loading objects", 0);
 
-  // Load all objects in parallel, reporting progress as each resolves
-  const promises = objects.map((desc) =>
-    createObjectFromDescriptor(desc)
-      .then((obj) => {
-        loaded++;
+  const results = new Array(total).fill(null);
+  let nextIndex = 0;
+  const workers = Array.from({
+    length: Math.min(OBJECT_LOAD_CONCURRENCY, Math.max(total, 1)),
+  }, async () => {
+    while (nextIndex < total) {
+      const currentIndex = nextIndex++;
+      const desc = objects[currentIndex];
+
+      try {
+        results[currentIndex] = await createObjectFromDescriptor(desc);
+        loaded += 1;
         emitWeightedProgress(`Loaded "${desc.name || desc.model}"`, loaded);
-        return obj;
-      })
-      .catch((err) => {
-        loaded++;
+      } catch (err) {
+        loaded += 1;
         console.error(`[scene] Failed to load object "${desc.name}":`, err);
         emitWeightedProgress(`Failed "${desc.name || desc.model}"`, loaded);
-        return null;
-      })
-  );
+      }
+    }
+  });
 
-  const results = await Promise.all(promises);
+  await Promise.all(workers);
 
   onProgress?.({ phase: "Building scene", loaded: 96, total: 100 });
 
@@ -200,6 +344,7 @@ export function enforceShadowBudget(scene) {
 
 export function serializeScene(objectsByName) {
   const objects = Array.from(objectsByName.values()).map((obj) => {
+    const sceneOptions = obj.userData.sceneOptions ?? {};
     const entry = {
       name: obj.name,
       model: obj.userData.sceneModel ?? "box",
@@ -224,6 +369,18 @@ export function serializeScene(objectsByName) {
         },
       },
     };
+
+    if (hasOwnKeys(sceneOptions.runtime)) {
+      entry.runtime = { ...sceneOptions.runtime };
+    }
+
+    if (hasOwnKeys(sceneOptions.shadows)) {
+      entry.shadows = { ...sceneOptions.shadows };
+    }
+
+    if (sceneOptions.visible === false) {
+      entry.visible = false;
+    }
 
     if (obj.isLight) {
       entry.material.intensity = obj.intensity;

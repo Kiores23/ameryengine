@@ -1,5 +1,26 @@
 {
   "version": 1,
+  "modelDefaults": {
+    "point_light": {
+      "shadows": {
+        "cast": false
+      }
+    },
+    "skill_architecture": {
+      "shadows": {
+        "cast": false
+      }
+    },
+    "skill_ai_corps": {
+      "runtime": {
+        "collidable": false
+      },
+      "shadows": {
+        "cast": false,
+        "receive": false
+      }
+    }
+  },
   "objects": [
     {
       "name": "who_i_am",
@@ -455,6 +476,9 @@
         "intensity": 5.5,
         "distance": 5
       },
+      "shadows": {
+        "cast": true
+      },
       "transform": {
         "position": {
           "x": -4.45,
@@ -665,6 +689,9 @@
         "intensity": 26.650000000000002,
         "distance": 5
       },
+      "shadows": {
+        "cast": true
+      },
       "transform": {
         "position": {
           "x": 3.6,
@@ -692,6 +719,9 @@
         "metalness": 0.1,
         "intensity": 75,
         "distance": 10
+      },
+      "shadows": {
+        "cast": true
       },
       "transform": {
         "position": {

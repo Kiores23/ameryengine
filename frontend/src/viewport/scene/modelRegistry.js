@@ -26,6 +26,7 @@ export function initModelRegistryLoader(renderer) {
 // Animated models (SkinnedMesh) must be re-parsed each time.
 const _staticCache = new Map();   // path → gltf
 const _hasAnimations = new Set(); // paths known to have animations
+const _missingPaths = new Set();
 
 export function clearModelRegistryCache() {
   for (const gltf of _staticCache.values()) {
@@ -34,10 +35,42 @@ export function clearModelRegistryCache() {
 
   _staticCache.clear();
   _hasAnimations.clear();
+  _missingPaths.clear();
+}
+
+function computeLocalBounds(object) {
+  const box = new THREE.Box3().setFromObject(object);
+  if (box.isEmpty()) return null;
+
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  return {
+    center,
+    size,
+    radius: size.length() * 0.5,
+  };
+}
+
+function cloneLocalBounds(bounds) {
+  if (!bounds) return null;
+  return {
+    center: bounds.center.clone(),
+    size: bounds.size.clone(),
+    radius: bounds.radius,
+  };
+}
+
+function applyLocalBoundsMetadata(object, bounds) {
+  if (!bounds) return;
+
+  object.userData.localBounds = cloneLocalBounds(bounds);
+  object.userData.boundingRadius = bounds.radius;
 }
 
 async function tryLoadFirst(paths) {
   for (const path of paths) {
+    if (_missingPaths.has(path)) continue;
+
     try {
       // Serve from static cache if this model was previously parsed as static
       if (_staticCache.has(path)) return _staticCache.get(path);
@@ -62,11 +95,12 @@ async function tryLoadFirst(paths) {
           return cached;
         }
 
+        applyLocalBoundsMetadata(gltf.scene, computeLocalBounds(gltf.scene));
         _staticCache.set(path, gltf);
       }
       return gltf;
     } catch {
-      // ignore
+      _missingPaths.add(path);
     }
   }
   return null;
@@ -108,7 +142,36 @@ function createSceneMaterial(materialOptions = {}) {
   });
 }
 
-export async function createDefaultModel(model, materialOptions = {}) {
+function shouldSkipCollisionProxy(options = {}) {
+  return options?.runtime?.collidable === false;
+}
+
+export async function warmModelCache(model) {
+  const light = createLight(model);
+  if (light) return;
+
+  const aiHelper = createAiHelperModel(model);
+  if (aiHelper) {
+    disposeObject3D(aiHelper);
+    return;
+  }
+
+  const testMaterial = new THREE.MeshBasicMaterial();
+  const primitive = createBasicShape(model, testMaterial);
+  if (primitive) {
+    primitive.geometry?.dispose?.();
+    primitive.material?.dispose?.();
+    return;
+  }
+  testMaterial.dispose();
+
+  await Promise.all([
+    tryLoadFirst(getModelPaths(model)),
+    tryLoadFirst(getAnimationPaths(model)),
+  ]);
+}
+
+export async function createDefaultModel(model, materialOptions = {}, options = {}) {
   // ---------- LIGHTS ----------
   const light = createLight(model);
   if (light) {
@@ -151,6 +214,10 @@ export async function createDefaultModel(model, materialOptions = {}) {
   if (fromStaticCache) {
     object.userData.usesSharedStaticAssets = true;
   }
+  applyLocalBoundsMetadata(
+    object,
+    modelGltf.scene.userData?.localBounds ?? computeLocalBounds(object),
+  );
 
   // ---------- FIX MATERIALS FOR IMPORTS ----------
   object.traverse((child) => {
@@ -171,10 +238,10 @@ export async function createDefaultModel(model, materialOptions = {}) {
   // ---------- COLLISION PROXY (box collider) ----------
   // Use a simple invisible box instead of the raw mesh for collision.
   // This prevents complex geometry from causing erratic collisions.
-  const box = new THREE.Box3().setFromObject(object);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-  if (size.x > 0 && size.y > 0 && size.z > 0) {
+  const localBounds = object.userData?.localBounds ?? null;
+  if (!shouldSkipCollisionProxy(options) && localBounds) {
+    const size = localBounds.size;
+    const center = localBounds.center;
     const proxyGeo = new THREE.BoxGeometry(size.x, size.y, size.z);
     const proxyMat = new THREE.MeshBasicMaterial({ visible: false });
     const proxyMesh = new THREE.Mesh(proxyGeo, proxyMat);

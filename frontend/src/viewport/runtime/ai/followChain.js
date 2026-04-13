@@ -15,6 +15,15 @@ const _targetDirection = new THREE.Vector3();
 const MAX_PITCH_RAD = THREE.MathUtils.degToRad(SKILL_AI_MAX_PITCH_DEG);
 
 function getObjectBoundingRadius(obj) {
+  const baseRadius = obj?.userData?.boundingRadius;
+  if (Number.isFinite(baseRadius) && baseRadius > 0) {
+    return baseRadius * Math.max(
+      Math.abs(obj.scale.x),
+      Math.abs(obj.scale.y),
+      Math.abs(obj.scale.z),
+    );
+  }
+
   _aiBox.setFromObject(obj);
   _aiBox.getBoundingSphere(_aiSphere);
   return _aiSphere.radius;
