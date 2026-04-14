@@ -20,10 +20,9 @@ export function createViewportObjectApi({
   getObjectByName,
   isEditorMode,
   prepareSceneReplacement,
-  syncEditorOnlyObjectsVisibility,
+  syncSceneObjectVisibility,
   generateUniqueObjectName,
   skillAiEditorState,
-  runtimeController,
   autoRotateController,
 }) {
   const moveCameraForward = new THREE.Vector3();
@@ -234,28 +233,28 @@ export function createViewportObjectApi({
       prepareSceneReplacement();
       await replaceSceneFromData(state, sceneData, onProgress);
       skillAiEditorState.cacheAll();
-      syncEditorOnlyObjectsVisibility();
+      syncSceneObjectVisibility();
     },
 
     async resetScene() {
       prepareSceneReplacement();
       await resetSceneToDefault(state);
       skillAiEditorState.cacheAll();
-      syncEditorOnlyObjectsVisibility();
+      syncSceneObjectVisibility();
     },
 
     async loadSceneFromUrl(url, onProgress) {
       prepareSceneReplacement();
       await loadSceneFromUrlIntoState(state, url, onProgress);
       skillAiEditorState.cacheAll();
-      syncEditorOnlyObjectsVisibility();
+      syncSceneObjectVisibility();
     },
 
     async loadSceneFromFile(file, onProgress) {
       prepareSceneReplacement();
       await loadSceneFromFileIntoState(state, file, onProgress);
       skillAiEditorState.cacheAll();
-      syncEditorOnlyObjectsVisibility();
+      syncSceneObjectVisibility();
     },
 
     exportSceneToFile(filename = "scene.json") {
@@ -265,10 +264,7 @@ export function createViewportObjectApi({
     async addObject(desc) {
       const obj = await addObjectToScene(scene, state.objectsByName, desc);
       skillAiEditorState.cacheObject(obj);
-
-      if (obj?.userData?.hideOutsideEditor) {
-        obj.visible = isEditorMode() && !runtimeController.isActive();
-      }
+      syncSceneObjectVisibility();
 
       return obj;
     },
@@ -285,7 +281,7 @@ export function createViewportObjectApi({
       const obj = getObjectByName(name);
       if (!obj) return null;
 
-      return {
+      const descriptor = {
         name: obj.name,
         model: obj.userData.sceneModel ?? "box",
         material: {
@@ -293,6 +289,39 @@ export function createViewportObjectApi({
         },
         transform: getTransformSnapshot(obj),
       };
+
+      if (obj.userData?.sceneOptions?.lite) {
+        descriptor.lite = {
+          ...obj.userData.sceneOptions.lite,
+        };
+      }
+
+      return descriptor;
+    },
+
+    setLiteAlwaysRenderOfName(name, value) {
+      const obj = getObjectByName(name);
+      if (!obj) return false;
+
+      const nextValue = value === true;
+      const sceneOptions = obj.userData.sceneOptions ?? {};
+      const liteOptions = sceneOptions.lite ?? {};
+
+      if (nextValue) {
+        liteOptions.alwaysRender = true;
+        sceneOptions.lite = liteOptions;
+      } else if (liteOptions.alwaysRender) {
+        delete liteOptions.alwaysRender;
+        if (Object.keys(liteOptions).length > 0) {
+          sceneOptions.lite = liteOptions;
+        } else {
+          delete sceneOptions.lite;
+        }
+      }
+
+      obj.userData.sceneOptions = sceneOptions;
+      syncSceneObjectVisibility();
+      return true;
     },
 
     removeObjectByName(name) {

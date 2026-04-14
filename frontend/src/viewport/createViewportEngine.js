@@ -6,6 +6,7 @@ import { clearModelRegistryCache, initModelRegistryLoader } from "./scene/modelR
 import {
   clearRuntimeObjects,
   generateUniqueObjectNameFromModel,
+  shouldObjectRenderInLite,
 } from "./scene/sceneRuntime";
 
 import { resizeRendererToCanvas } from "./utils/resizeRendererToCanvas";
@@ -22,12 +23,21 @@ import { resetEditorState, resetTransformAttachment } from "./engine/sceneState"
 import { createAutoRotateController } from "./engine/autoRotateController";
 import { createFogController } from "./engine/fogController";
 import { createLookController } from "./engine/lookController";
+import { createPointLightCullingController } from "./engine/pointLightCullingController";
 import { createSkillAiEditorState } from "./engine/skillAiEditorState";
 import { createTransformControlsController } from "./engine/transformControlsController";
 import { createViewportObjectApi } from "./engine/viewportObjectApi";
 
 import { createRuntimeController } from "./runtime/runtimeMode";
 import { createSkillAiSystem } from "./runtime/ai/skillAiSystem";
+import {
+  DEFAULT_SHADOW_DIRTY_DEBOUNCE,
+  DEFAULT_SHADOW_MAP_SIZE,
+  DEFAULT_SHADOW_REFRESH_INTERVAL,
+  LITE_SHADOW_MAP_SCALE,
+  LITE_SHADOW_DIRTY_DEBOUNCE,
+  LITE_SHADOW_REFRESH_INTERVAL,
+} from "./constants/lights.js";
 
 export async function createViewportEngine(canvas) {
   const state = createEngineState();
@@ -82,10 +92,21 @@ export async function createViewportEngine(canvas) {
 
   let shadowDirty = true;
   let shadowFrameCounter = 0;
-  const SHADOW_REFRESH_INTERVAL = 30;
 
   function markShadowsDirty() {
     shadowDirty = true;
+  }
+
+  function getShadowRefreshInterval() {
+    return isLiteMode
+      ? LITE_SHADOW_REFRESH_INTERVAL
+      : DEFAULT_SHADOW_REFRESH_INTERVAL;
+  }
+
+  function getShadowDirtyDebounce() {
+    return isLiteMode
+      ? LITE_SHADOW_DIRTY_DEBOUNCE
+      : DEFAULT_SHADOW_DIRTY_DEBOUNCE;
   }
 
   const timer = new THREE.Timer();
@@ -94,14 +115,24 @@ export async function createViewportEngine(canvas) {
   const skillAiSystem = createSkillAiSystem();
   const runtimeRaycaster = new THREE.Raycaster();
   let isEditorMode = false;
+  let isLiteMode = false;
   let editorModeBeforeRuntime = false;
   let selectedObjectName = null;
+  let pointLightCullingController = null;
 
   dom.addEventListener("wheel", syncViewerFocusFromWheel, { passive: true });
 
   const autoRotateController = createAutoRotateController({
     camera,
     objectsByName: state.objectsByName,
+  });
+  pointLightCullingController = createPointLightCullingController({
+    camera,
+    objectsByName: state.objectsByName,
+    isEditorMode: () => isEditorMode,
+    isRuntimeActive: () => runtimeController.isActive(),
+    getRuntimePlayer: () => runtimeController.getCharacter(),
+    getSelectedObjectName: () => selectedObjectName,
   });
   const fogController = createFogController({
     scene,
@@ -141,12 +172,96 @@ export async function createViewportEngine(canvas) {
     return generateUniqueObjectNameFromModel(modelName, state.objectsByName);
   }
 
-  function syncEditorOnlyObjectsVisibility(
-    showEditorOnly = isEditorMode && !runtimeController.isActive(),
+  function getBaseShadowMapSize(light) {
+    const saved = light.userData?.baseShadowMapSize;
+    if (saved?.width > 0 && saved?.height > 0) {
+      return saved;
+    }
+
+    const width = Math.max(1, Number(light.shadow?.mapSize?.width) || DEFAULT_SHADOW_MAP_SIZE);
+    const height = Math.max(1, Number(light.shadow?.mapSize?.height) || DEFAULT_SHADOW_MAP_SIZE);
+    light.userData.baseShadowMapSize = { width, height };
+    return light.userData.baseShadowMapSize;
+  }
+
+  function applyShadowQualityForLight(light, liteMode = isLiteMode) {
+    if (!light?.isLight || !light.shadow) return false;
+
+    const baseSize = getBaseShadowMapSize(light);
+    const scale = liteMode ? LITE_SHADOW_MAP_SCALE : 1;
+    const targetWidth = Math.max(128, Math.round(baseSize.width * scale));
+    const targetHeight = Math.max(128, Math.round(baseSize.height * scale));
+
+    if (
+      light.shadow.mapSize.width === targetWidth &&
+      light.shadow.mapSize.height === targetHeight
+    ) {
+      return false;
+    }
+
+    light.shadow.mapSize.set(targetWidth, targetHeight);
+    light.shadow.map?.dispose?.();
+    light.shadow.map = null;
+    return true;
+  }
+
+  function getObjectBaseVisibility(
+    obj,
+    {
+      showEditorOnly = isEditorMode && !runtimeController.isActive(),
+      liteMode = isLiteMode,
+    } = {},
   ) {
+    if (!obj) return false;
+    if (obj.userData?.sceneOptions?.visible === false) return false;
+    if (obj.userData?.hideOutsideEditor && !showEditorOnly) return false;
+    if (liteMode && obj.name !== selectedObjectName && !shouldObjectRenderInLite(obj)) {
+      return false;
+    }
+    return true;
+  }
+
+  function syncSceneObjectVisibility(
+    options = {},
+  ) {
+    let changed = false;
+
     for (const obj of state.objectsByName.values()) {
-      if (!obj.userData?.hideOutsideEditor) continue;
-      obj.visible = showEditorOnly;
+      if (applyShadowQualityForLight(obj, options.liteMode)) {
+        changed = true;
+      }
+
+      const baseVisible = getObjectBaseVisibility(obj, options);
+      if (obj.userData?.baseVisible !== baseVisible) {
+        obj.userData.baseVisible = baseVisible;
+      }
+
+      if (obj.isPointLight) {
+        if (!baseVisible && obj.visible !== false) {
+          obj.visible = false;
+          changed = true;
+        }
+        continue;
+      }
+
+      if (obj.visible !== baseVisible) {
+        obj.visible = baseVisible;
+        changed = true;
+      }
+    }
+
+    if (pointLightCullingController?.update()) {
+      changed = true;
+    }
+
+    return changed;
+  }
+
+  function applyLiteMode(nextLiteMode) {
+    isLiteMode = !!nextLiteMode;
+
+    if (syncSceneObjectVisibility()) {
+      markShadowsDirty();
     }
   }
 
@@ -174,7 +289,9 @@ export async function createViewportEngine(canvas) {
       RIGHT: isEditorMode ? THREE.MOUSE.PAN : null,
     };
 
-    syncEditorOnlyObjectsVisibility();
+    if (syncSceneObjectVisibility()) {
+      markShadowsDirty();
+    }
     fogController.applyFogMode(isEditorMode || runtimeController.isActive());
   }
 
@@ -225,8 +342,17 @@ export async function createViewportEngine(canvas) {
       }
     }
 
+    if (pointLightCullingController.update()) {
+      markShadowsDirty();
+    }
+
     shadowFrameCounter += 1;
-    if (shadowDirty || shadowFrameCounter >= SHADOW_REFRESH_INTERVAL) {
+    const shouldRefreshForDirty =
+      shadowDirty && shadowFrameCounter >= getShadowDirtyDebounce();
+    const shouldRefreshForInterval =
+      shadowFrameCounter >= getShadowRefreshInterval();
+
+    if (shouldRefreshForDirty || shouldRefreshForInterval) {
       renderer.shadowMap.needsUpdate = true;
       shadowDirty = false;
       shadowFrameCounter = 0;
@@ -248,10 +374,9 @@ export async function createViewportEngine(canvas) {
     getObjectByName,
     isEditorMode: () => isEditorMode,
     prepareSceneReplacement,
-    syncEditorOnlyObjectsVisibility,
+    syncSceneObjectVisibility,
     generateUniqueObjectName,
     skillAiEditorState,
-    runtimeController,
     autoRotateController,
   });
 
@@ -327,8 +452,15 @@ export async function createViewportEngine(canvas) {
       applyEditorMode(value);
     },
 
+    setLiteMode(value) {
+      applyLiteMode(value);
+    },
+
     setSelectedObjectName(name) {
       selectedObjectName = name || null;
+      if (isLiteMode && syncSceneObjectVisibility()) {
+        markShadowsDirty();
+      }
       if (!isEditorMode && !runtimeController.isActive()) {
         fogController.updateViewerFogForSelection();
       }

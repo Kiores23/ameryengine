@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { supportsLiteAlwaysRender } from "../utils/sceneModels";
 
 /* ── helpers ─────────────────────────────────────────── */
 function vec3ToInputs(v) {
@@ -178,6 +179,8 @@ export default function EditPanel({
   const [isLight, setIsLight] = useState(false);
   const [intensity, setIntensity] = useState(1);
   const [distance, setDistance] = useState(null);
+  const [liteAlwaysRender, setLiteAlwaysRender] = useState(false);
+  const [canConfigureLiteRendering, setCanConfigureLiteRendering] = useState(false);
 
   useEffect(() => {
     const api = viewportApiRef?.current;
@@ -203,6 +206,15 @@ export default function EditPanel({
     if (info.isLight) setIntensity(info.intensity ?? 1);
     setDistance(info.distance ?? null);
   }, [node?.target, viewportApiRef]);
+
+  useEffect(() => {
+    const api = viewportApiRef?.current;
+    const descriptor = api?.getObjectDescriptorByName?.(node?.target);
+    const model = descriptor?.model ?? node?.model ?? "";
+
+    setCanConfigureLiteRendering(supportsLiteAlwaysRender(model));
+    setLiteAlwaysRender(descriptor?.lite?.alwaysRender === true);
+  }, [node?.target, node?.model, viewportApiRef]);
 
   useEffect(() => {
     const api = viewportApiRef?.current;
@@ -279,6 +291,12 @@ export default function EditPanel({
   const applyDistance = (val) => {
     setDistance(val);
     viewportApiRef?.current?.setDistanceOfName?.(node.target, val);
+  };
+
+  const applyLiteAlwaysRender = (nextValue) => {
+    const enabled = nextValue === true;
+    setLiteAlwaysRender(enabled);
+    viewportApiRef?.current?.setLiteAlwaysRenderOfName?.(node.target, enabled);
   };
 
   const modes = [
@@ -391,6 +409,37 @@ export default function EditPanel({
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {canConfigureLiteRendering && (
+            <div className="details__hero editLite">
+              <div className="details__heroHighlight" />
+
+              <div className="xformTitle">Lite Mode</div>
+
+              <div className="xformRow xformRow--toggle">
+                <div className="xformLabel">Render</div>
+
+                <label className="xformToggle">
+                  <input
+                    type="checkbox"
+                    checked={liteAlwaysRender}
+                    onChange={(e) => {
+                      pushUndo?.({
+                        type: "liteAlwaysRender",
+                        name: node.target,
+                        old: liteAlwaysRender,
+                      });
+                      applyLiteAlwaysRender(e.target.checked);
+                    }}
+                  />
+
+                  <span className="xformToggle__text">
+                    Always render this imported 3D model in lite mode
+                  </span>
+                </label>
+              </div>
             </div>
           )}
 

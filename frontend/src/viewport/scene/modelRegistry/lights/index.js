@@ -1,16 +1,19 @@
 import * as THREE from "three";
+import {
+  DEFAULT_SHADOW_MAP_SIZE,
+  MAX_SHADOW_LIGHTS,
+} from "../../../constants/lights.js";
+export { MAX_SHADOW_LIGHTS };
 
 /**
  * Configure shadow properties for lights that support it.
  */
-/** Max number of lights allowed to cast shadows simultaneously. */
-export const MAX_SHADOW_LIGHTS = 3;
 
 function enableShadow(light) {
   if (!light.shadow) return light;
   light.castShadow = true;
-  light.shadow.mapSize.width = 512;
-  light.shadow.mapSize.height = 512;
+  light.shadow.mapSize.width = DEFAULT_SHADOW_MAP_SIZE;
+  light.shadow.mapSize.height = DEFAULT_SHADOW_MAP_SIZE;
   light.shadow.bias = 0;
   light.shadow.normalBias = 0.05;
   // Soft area for DirectionalLight / SpotLight

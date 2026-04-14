@@ -392,6 +392,11 @@ export function useSceneEditor({
           syncLocalDescriptorFromViewport(api, action.name);
           break;
 
+        case "liteAlwaysRender":
+          api.setLiteAlwaysRenderOfName?.(action.name, action.old === true);
+          syncLocalDescriptorFromViewport(api, action.name);
+          break;
+
         default:
           console.warn("[useSceneEditor] Unknown undo action:", action.type);
           return false;

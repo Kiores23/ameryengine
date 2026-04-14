@@ -74,6 +74,7 @@ export default function Details({
   onFocus,
   onOpenDemo,
   editorMode,
+  editorAvailable = true,
   onOpenEdit,
   onBack,
   onForward,
@@ -250,9 +251,15 @@ export default function Details({
               )}
             </div>
 
-            {!editorMode && (
+            {!editorMode && editorAvailable && (
               <p className="hint">
                 Tip: Activate <b>Editor Mode</b> to manipulate the object if needed.
+              </p>
+            )}
+
+            {!editorMode && !editorAvailable && (
+              <p className="hint">
+                Lite mode is active, so the editor is hidden for this view.
               </p>
             )}
           </div>

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { createDefaultModel, warmModelCache } from "./modelRegistry";
 import { MAX_SHADOW_LIGHTS } from "./modelRegistry/lights/index.js";
 import { disposeObject3D } from "../engine/objectDisposal";
+import { shouldRenderSceneObjectInLite } from "../../utils/sceneModels";
 
 const OBJECT_LOAD_CONCURRENCY = 8;
 const PRELOAD_CONCURRENCY = 4;
@@ -92,6 +93,7 @@ function mergeDescriptorWithDefaults(defaults = {}, desc = {}) {
     transform: mergeTransforms(defaults.transform, desc.transform),
     runtime: mergeNestedObject(defaults.runtime, desc.runtime),
     shadows: mergeNestedObject(defaults.shadows, desc.shadows),
+    lite: mergeNestedObject(defaults.lite, desc.lite),
   };
 }
 
@@ -108,6 +110,10 @@ function copySceneOptions(desc) {
 
   if (desc.visible === false) {
     options.visible = false;
+  }
+
+  if (desc.lite) {
+    options.lite = { ...desc.lite };
   }
 
   return options;
@@ -378,6 +384,10 @@ export function serializeScene(objectsByName) {
       entry.shadows = { ...sceneOptions.shadows };
     }
 
+    if (hasOwnKeys(sceneOptions.lite)) {
+      entry.lite = { ...sceneOptions.lite };
+    }
+
     if (sceneOptions.visible === false) {
       entry.visible = false;
     }
@@ -401,4 +411,13 @@ export function serializeScene(objectsByName) {
     version: 1,
     objects,
   };
+}
+
+export function shouldObjectRenderInLite(object3D) {
+  if (!object3D) return false;
+
+  return shouldRenderSceneObjectInLite(
+    object3D.userData?.sceneModel,
+    object3D.userData?.sceneOptions?.lite,
+  );
 }

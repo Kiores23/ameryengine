@@ -9,6 +9,9 @@
     "skill_architecture": {
       "shadows": {
         "cast": false
+      },
+      "lite": {
+        "alwaysRender": true
       }
     },
     "skill_ai_corps": {
@@ -18,6 +21,103 @@
       "shadows": {
         "cast": false,
         "receive": false
+      }
+    },
+    "who_i_am": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "philosophy": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "interests": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "basketball": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "boardgames": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "couch": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "other_gm": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "ritchie": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "seat": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "skill_ai": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "table": {
+      "lite": {
+        "alwaysRender": true
+      }
+    }
+    ,
+    "trains": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "exp_corys": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "exp_42": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "painting": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "skill_network": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "skill_gameplay": {
+      "lite": {
+        "alwaysRender": true
+      }
+    },
+    "skill_math": {
+      "lite": {
+        "alwaysRender": true
       }
     }
   },

@@ -10,6 +10,7 @@ export default function Viewport({
   active,
   selectedTargetName,
   editorMode,
+  liteMode = false,
   runtimeMode,
   runtimeLayout = "wasd",
   runtimeCursorLocked = false,
@@ -29,6 +30,7 @@ export default function Viewport({
   const engineRef = useRef(null);
   const selectedTargetNameRef = useRef(selectedTargetName);
   const effectiveEditorModeRef = useRef(editorMode && !runtimeMode);
+  const liteModeRef = useRef(liteMode);
   const [engineReady, setEngineReady] = useState(false);
   const [sceneLoading, setSceneLoading] = useState(true);
   const keybindings = useKeybindings();
@@ -44,6 +46,10 @@ export default function Viewport({
   useEffect(() => {
     effectiveEditorModeRef.current = editorMode && !runtimeMode;
   }, [editorMode, runtimeMode]);
+
+  useEffect(() => {
+    liteModeRef.current = liteMode;
+  }, [liteMode]);
 
   function resetSelectionSideEffects() {
     const api = getApi();
@@ -67,6 +73,7 @@ export default function Viewport({
     const targetName = selectedTargetNameRef.current;
     const isEditorMode = effectiveEditorModeRef.current;
 
+    api.setLiteMode?.(liteModeRef.current);
     api.setEditorMode(isEditorMode);
     api.setSelectedObjectName(targetName);
 
@@ -194,6 +201,12 @@ export default function Viewport({
     if (!api) return;
     api.setEditorMode(editorMode && !runtimeMode);
   }, [editorMode, runtimeMode, engineReady]);
+
+  useEffect(() => {
+    const api = getApi();
+    if (!api) return;
+    api.setLiteMode?.(liteMode);
+  }, [liteMode, engineReady]);
 
   useEffect(() => {
     const api = getApi();

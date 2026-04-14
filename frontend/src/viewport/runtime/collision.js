@@ -408,7 +408,10 @@ export function createCollisionSystem() {
     // ── 1. Try horizontal sweep ──
     const blocked = _doSweep(px0, pz0, heights, moveLen, stepFloorY);
 
-    if (blocked && _tryStepUp(dx, dz, character, physics, moveLen)) return;
+    // Rising walkable ground (ramps / inclined platforms) is intentionally
+    // ignored by wall sweeps, so we must still try a grounded step-up even
+    // when nothing "blocked" the horizontal move.
+    if (_tryStepUp(dx, dz, character, physics, moveLen)) return;
 
     if (!blocked) {
       character.position.x += dx;

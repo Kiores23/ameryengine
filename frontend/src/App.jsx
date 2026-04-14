@@ -43,6 +43,7 @@ const TAB_ORDER = [TAB_VIEWPORT, TAB_MEDIA, TAB_DEMO, TAB_CONTACT];
 export default function App() {
   const [activeTab, setActiveTab] = useState(TAB_VIEWPORT);
   const [editorMode, setEditorMode] = useState(false);
+  const [liteMode, setLiteMode] = useState(false);
   const [rightTab, setRightTab] = useState(RIGHT_TAB_DETAILS);
   const [transformOn, setTransformOn] = useState(false);
   const [transformMode, setTransformMode] = useState(TRANSFORM_TRANSLATE);
@@ -104,10 +105,12 @@ export default function App() {
   });
 
   const editedItem = selectedSceneObject || selectedNode;
+  const effectiveEditorMode = editorMode && !liteMode;
+  const shouldShowEditPanel = effectiveEditorMode && rightTab === RIGHT_TAB_EDIT;
 
   useViewportSync({ viewportApiRef, activeTab });
 
-  const canUseAssetLibrary = editorMode && activeTab === TAB_VIEWPORT && !runtimeMode;
+  const canUseAssetLibrary = effectiveEditorMode && activeTab === TAB_VIEWPORT && !runtimeMode;
 
   useKeyboardShortcuts({
     enabled: canUseAssetLibrary,
@@ -125,7 +128,7 @@ export default function App() {
   });
 
   useEditorShortcuts({
-    editorMode,
+    editorMode: effectiveEditorMode,
     runtimeMode,
     activeTab,
     onDelete: deleteSelectedSceneObject,
@@ -135,15 +138,15 @@ export default function App() {
   });
 
   useCameraMovement({
-    enabled: editorMode,
+    enabled: effectiveEditorMode,
     viewportApiRef,
-    editorMode,
+    editorMode: effectiveEditorMode,
     runtimeMode,
   });
 
   useTransformShortcuts({
-    enabled: editorMode,
-    editorMode,
+    enabled: effectiveEditorMode,
+    editorMode: effectiveEditorMode,
     runtimeMode,
     activeTab,
     transformMode,
@@ -158,13 +161,19 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (!liteMode || !editorMode) return;
+
+    setEditorMode(false);
+  }, [liteMode, editorMode]);
+
+  useEffect(() => {
     // Skip on initial mount
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
     
-    if (!editorMode) {
+    if (!effectiveEditorMode) {
       // Stop runtime if active
       if (runtimeMode) {
         viewportApiRef.current?.stopRuntime?.();
@@ -177,10 +186,10 @@ export default function App() {
       resetHistory();
       setRightTab(RIGHT_TAB_DETAILS);
     }
-    if (!editorMode && rightTab === RIGHT_TAB_EDIT) {
+    if (!effectiveEditorMode && rightTab === RIGHT_TAB_EDIT) {
       setRightTab(RIGHT_TAB_DETAILS);
     }
-  }, [editorMode, rightTab]);
+  }, [effectiveEditorMode, rightTab]);
 
   useEffect(() => {
     if (activeTab === TAB_MEDIA) {
@@ -253,15 +262,31 @@ export default function App() {
           {!isLoading && (
             <>
               <button
-                className="btn btn--ghost"
-                aria-pressed={editorMode}
-                onClick={() => { exitRuntime(); setEditorMode((v) => !v); }}
+                className={"btn btn--ghost" + (liteMode ? " active" : "")}
+                aria-pressed={liteMode}
+                onClick={() => {
+                  setLiteMode((value) => {
+                    const nextValue = !value;
+                    setStatusMessage(nextValue ? "Lite mode enabled." : "Lite mode disabled.");
+                    return nextValue;
+                  });
+                }}
               >
-                {editorMode ? "Editor Mode ✓" : "Editor Mode"}
+                {liteMode ? "Lite Mode ✓" : "Lite Mode"}
               </button>
 
+              {!liteMode && (
+                <button
+                  className="btn btn--ghost"
+                  aria-pressed={editorMode}
+                  onClick={() => { exitRuntime(); setEditorMode((v) => !v); }}
+                >
+                  {editorMode ? "Editor Mode ✓" : "Editor Mode"}
+                </button>
+              )}
+
               <EditorFileMenu
-                editorMode={editorMode && !runtimeMode}
+                editorMode={effectiveEditorMode && !runtimeMode}
                 onFilePicked={(e) => {
                   const file = e.target.files?.[0];
                   if (!file) return;
@@ -330,7 +355,7 @@ export default function App() {
               selectedSceneObjectName={selectedSceneObjectName}
               onSelect={selectNode}
               onSelectSceneObject={selectSceneObject}
-              editorMode={editorMode}
+              editorMode={effectiveEditorMode}
             />
           </section>
           )}
@@ -390,7 +415,8 @@ export default function App() {
                       <Viewport
                         active={activeTab === TAB_VIEWPORT}
                         selectedTargetName={editedItem?.target || null}
-                        editorMode={editorMode}
+                        editorMode={effectiveEditorMode}
+                        liteMode={liteMode}
                         runtimeMode={runtimeMode}
                         runtimeLayout={runtimeLayout}
                         runtimeCursorLocked={runtimeCursorLocked}
@@ -490,7 +516,7 @@ export default function App() {
         <aside className="dock right">
           {!runtimeMode && (
           <section className="panel">
-            {rightTab === RIGHT_TAB_DETAILS && !selectedSceneObject ? (
+            {!shouldShowEditPanel ? (
               <Details
                 node={selectedNode}
                 nodes={NODES}
@@ -501,7 +527,8 @@ export default function App() {
                 canGoForward={historyForward.length > 0}
                 onFocus={() => selectedNode && viewportApiRef.current?.focusOnName(selectedNode.target)}
                 onOpenDemo={() => openDemoForNode(selectedNode)}
-                editorMode={editorMode}
+                editorMode={effectiveEditorMode}
+                editorAvailable={!liteMode}
                 setEditorMode={setEditorMode}
                 transformOn={transformOn}
                 setTransformOn={setTransformOn}

@@ -146,7 +146,8 @@
    ========================================================= */
 
 .editMaterial,
-.editLight {
+.editLight,
+.editLite {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -205,4 +206,34 @@
   gap: 8px;
   min-width: 0;
   max-width: 120px;
+}
+
+.xformRow--toggle {
+  align-items: center;
+}
+
+.xformRow--toggle .xformLabel {
+  padding-top: 0;
+}
+
+.xformToggle {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.xformToggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent2);
+}
+
+.xformToggle__text {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text);
 }
