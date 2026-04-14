@@ -418,6 +418,8 @@ export function useSceneEditor({
 
   const bindViewportApi = useCallback((api, initialTarget) => {
     viewportApiRef.current = api;
+    if (!api) return;
+
     api.setRunning(true);
 
     api.onTransformStart?.((targetName) => {

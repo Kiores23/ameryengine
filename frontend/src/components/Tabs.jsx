@@ -9,9 +9,11 @@ export default function Tabs({
   activeTab,
   onChangeTab,
   canOpenMedia = false,
+  baseTab = TAB_VIEWPORT,
+  viewportDisabled = false,
 }) {
   const tabs = [
-    { id: TAB_VIEWPORT, label: "Viewport", toggle: false, disabled: false },
+    { id: TAB_VIEWPORT, label: "Viewport", toggle: false, disabled: viewportDisabled },
     { id: TAB_MEDIA, label: "Media", toggle: true, disabled: !canOpenMedia },
     { id: TAB_DEMO, label: "Demo", toggle: true, disabled: true },
     { id: TAB_CONTACT, label: "Contact", toggle: true, disabled: false },
@@ -26,7 +28,7 @@ export default function Tabs({
     }
 
     onChangeTab((current) =>
-      current === tab.id ? TAB_VIEWPORT : tab.id
+      current === tab.id ? baseTab : tab.id
     );
   };
 

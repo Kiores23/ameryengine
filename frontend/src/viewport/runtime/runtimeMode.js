@@ -4,6 +4,7 @@ import { getCollidables } from "./helpers.js";
 import { createDebugManager } from "./debug.js";
 import { createCollisionSystem } from "./collision.js";
 import { updateCamera } from "./camera.js";
+import { playAnimation } from "../engine/animation.js";
 
 // ─────────────────────────────────────────
 //  FACTORY
@@ -34,6 +35,7 @@ export function createRuntimeController() {
   let _focusReleased = false;
   let spawnPos        = null;
   let _cachedCollidables = null;
+  let captureInput = true;
 
   let yaw   = 0;
   let pitch = 0.3;
@@ -50,6 +52,17 @@ export function createRuntimeController() {
   function resetInputs() {
     for (const k in keys) keys[k] = false;
     jumpPressedAt = -Infinity;
+  }
+
+  function resetCharacterAnimation(targetCharacter = character) {
+    const actions = targetCharacter?.userData?.animationActions;
+    if (!actions) return false;
+
+    const defaultAnimation = targetCharacter.userData?.defaultAnimation ?? "idle";
+    return (
+      playAnimation(actions, defaultAnimation) ||
+      playAnimation(actions, "idle")
+    );
   }
 
   // ── Input ──────────────────────────────
@@ -127,7 +140,19 @@ export function createRuntimeController() {
   }
 
   // ── Lifecycle ──────────────────────────
-  function start(state, camera, controls, targetName, canvasEl, onStop, { onLayoutChange, onCursorLockChange } = {}) {
+  function start(
+    state,
+    camera,
+    controls,
+    targetName,
+    canvasEl,
+    onStop,
+    {
+      onLayoutChange,
+      onCursorLockChange,
+      background = false,
+    } = {},
+  ) {
     if (active) return false;
 
     const obj = state.objectsByName?.get(targetName);
@@ -138,6 +163,7 @@ export function createRuntimeController() {
     canvas         = canvasEl;
     _onLayoutChange    = onLayoutChange ?? null;
     _onCursorLockChange = onCursorLockChange ?? null;
+    captureInput = !background;
     active    = true;
     physics.velocityY  = 0;
     physics.isGrounded = false;
@@ -174,16 +200,20 @@ export function createRuntimeController() {
     collision.buildCache(_cachedCollidables);
     updateCamera(camera, { yaw, pitch }, character, _cachedCollidables, true);
 
-    canvas.requestPointerLock?.();
     debug.init(character, _cachedCollidables);
 
-    window.addEventListener("keydown",  onKeyDown);
-    window.addEventListener("keyup",    onKeyUp);
-    window.addEventListener("blur",     onWindowBlur);
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    document.addEventListener("mousemove",          onMouseMove);
-    document.addEventListener("pointerlockchange",  onPointerLockChange);
-    canvas.addEventListener("click", onCanvasClick);
+    if (captureInput) {
+      canvas.requestPointerLock?.();
+      window.addEventListener("keydown",  onKeyDown);
+      window.addEventListener("keyup",    onKeyUp);
+      window.addEventListener("blur",     onWindowBlur);
+      document.addEventListener("visibilitychange", onVisibilityChange);
+      document.addEventListener("mousemove",          onMouseMove);
+      document.addEventListener("pointerlockchange",  onPointerLockChange);
+      canvas.addEventListener("click", onCanvasClick);
+    } else {
+      _onCursorLockChange?.(false);
+    }
 
     return true;
   }
@@ -193,7 +223,9 @@ export function createRuntimeController() {
     active = false;
     resetInputs();
 
-    if (document.pointerLockElement === canvas) document.exitPointerLock?.();
+    if (captureInput && document.pointerLockElement === canvas) {
+      document.exitPointerLock?.();
+    }
 
     if (savedCamPos) camera.position.copy(savedCamPos);
     if (savedTarget) controls.target.copy(savedTarget);
@@ -211,19 +243,24 @@ export function createRuntimeController() {
     }
     savedTransforms = null;
 
+    resetCharacterAnimation();
+
     debug.destroy();
     collision.clearCache();
 
-    window.removeEventListener("keydown",  onKeyDown);
-    window.removeEventListener("keyup",    onKeyUp);
-    window.removeEventListener("blur",     onWindowBlur);
-    document.removeEventListener("visibilitychange", onVisibilityChange);
-    document.removeEventListener("mousemove",         onMouseMove);
-    document.removeEventListener("pointerlockchange", onPointerLockChange);
-    canvas?.removeEventListener("click", onCanvasClick);
+    if (captureInput) {
+      window.removeEventListener("keydown",  onKeyDown);
+      window.removeEventListener("keyup",    onKeyUp);
+      window.removeEventListener("blur",     onWindowBlur);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      document.removeEventListener("mousemove",         onMouseMove);
+      document.removeEventListener("pointerlockchange", onPointerLockChange);
+      canvas?.removeEventListener("click", onCanvasClick);
+    }
 
     _tabReleased = false;
     _focusReleased = false;
+    captureInput = true;
     _onCursorLockChange?.(false);
     _cachedCollidables = null;
     character = canvas = savedCamPos = savedTarget = stopCb = objectsByName = null;

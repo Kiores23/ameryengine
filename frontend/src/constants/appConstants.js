@@ -9,6 +9,10 @@ export const RIGHT_TAB_DETAILS = "details";
 export const RIGHT_TAB_EDIT = "edit";
 
 export const TRANSFORM_TRANSLATE = "translate";
+export const RENDER_MODE_NATIVE = "native";
+export const RENDER_MODE_LITE = "lite";
+export const RENDER_MODE_ULTRA_LITE = "ultra-lite";
+export const RENDER_MODE_NO_VIEWPORT = "no-viewport";
 
 export const DEFAULT_DEMO_URL = "https://example.com";
 export const DEFAULT_SCENE_URL = resolvePublicPath("scenes/default.scene.json");

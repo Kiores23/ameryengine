@@ -116,6 +116,7 @@ export async function createViewportEngine(canvas) {
   const runtimeRaycaster = new THREE.Raycaster();
   let isEditorMode = false;
   let isLiteMode = false;
+  let isUltraLiteMode = false;
   let editorModeBeforeRuntime = false;
   let selectedObjectName = null;
   let pointLightCullingController = null;
@@ -182,6 +183,63 @@ export async function createViewportEngine(canvas) {
     const height = Math.max(1, Number(light.shadow?.mapSize?.height) || DEFAULT_SHADOW_MAP_SIZE);
     light.userData.baseShadowMapSize = { width, height };
     return light.userData.baseShadowMapSize;
+  }
+
+  function disposeShadowMaps() {
+    for (const obj of state.objectsByName.values()) {
+      if (!obj?.isLight || !obj.shadow?.map) continue;
+      obj.shadow.map.dispose?.();
+      obj.shadow.map = null;
+    }
+  }
+
+  function applyShadowSystemState() {
+    let changed = false;
+
+    for (const obj of state.objectsByName.values()) {
+      if (!obj?.isLight || !obj.shadow) continue;
+
+      if (isUltraLiteMode) {
+        if (obj.userData.ultraLiteSavedCastShadow == null) {
+          obj.userData.ultraLiteSavedCastShadow = !!obj.castShadow;
+        }
+
+        if (obj.castShadow) {
+          obj.castShadow = false;
+          obj.shadow.map?.dispose?.();
+          obj.shadow.map = null;
+          changed = true;
+        }
+
+        continue;
+      }
+
+      if (obj.userData.ultraLiteSavedCastShadow == null) {
+        continue;
+      }
+
+      const restoreCastShadow = obj.userData.ultraLiteSavedCastShadow === true;
+      delete obj.userData.ultraLiteSavedCastShadow;
+
+      if (obj.castShadow !== restoreCastShadow) {
+        obj.castShadow = restoreCastShadow;
+        changed = true;
+      }
+    }
+
+    if (isUltraLiteMode) {
+      renderer.shadowMap.needsUpdate = false;
+      shadowDirty = false;
+      shadowFrameCounter = 0;
+      return changed;
+    }
+
+    if (changed) {
+      shadowDirty = true;
+      shadowFrameCounter = getShadowDirtyDebounce();
+    }
+
+    return changed;
   }
 
   function applyShadowQualityForLight(light, liteMode = isLiteMode) {
@@ -265,6 +323,17 @@ export async function createViewportEngine(canvas) {
     }
   }
 
+  function applyUltraLiteMode(nextUltraLiteMode) {
+    isUltraLiteMode = !!nextUltraLiteMode;
+
+    const shadowStateChanged = applyShadowSystemState();
+    const visibilityChanged = syncSceneObjectVisibility();
+
+    if (shadowStateChanged || visibilityChanged) {
+      markShadowsDirty();
+    }
+  }
+
   function applyEditorMode(nextEditorMode) {
     const wasEditorMode = isEditorMode;
     isEditorMode = !!nextEditorMode;
@@ -312,7 +381,7 @@ export async function createViewportEngine(canvas) {
 
     const nonEditorSimulationActive = !isEditorMode || runtimeController.isActive();
 
-    if (nonEditorSimulationActive && autoRotateController.update(delta)) {
+    if (!isUltraLiteMode && nonEditorSimulationActive && autoRotateController.update(delta)) {
       markShadowsDirty();
     }
 
@@ -346,16 +415,18 @@ export async function createViewportEngine(canvas) {
       markShadowsDirty();
     }
 
-    shadowFrameCounter += 1;
-    const shouldRefreshForDirty =
-      shadowDirty && shadowFrameCounter >= getShadowDirtyDebounce();
-    const shouldRefreshForInterval =
-      shadowFrameCounter >= getShadowRefreshInterval();
+    if (!isUltraLiteMode && renderer.shadowMap.enabled) {
+      shadowFrameCounter += 1;
+      const shouldRefreshForDirty =
+        shadowDirty && shadowFrameCounter >= getShadowDirtyDebounce();
+      const shouldRefreshForInterval =
+        shadowFrameCounter >= getShadowRefreshInterval();
 
-    if (shouldRefreshForDirty || shouldRefreshForInterval) {
-      renderer.shadowMap.needsUpdate = true;
-      shadowDirty = false;
-      shadowFrameCounter = 0;
+      if (shouldRefreshForDirty || shouldRefreshForInterval) {
+        renderer.shadowMap.needsUpdate = true;
+        shadowDirty = false;
+        shadowFrameCounter = 0;
+      }
     }
 
     renderer.render(scene, camera);
@@ -405,7 +476,15 @@ export async function createViewportEngine(canvas) {
       state.running = !!value;
     },
 
-    startRuntime(targetName, onStop, { onLayoutChange, onCursorLockChange } = {}) {
+    startRuntime(
+      targetName,
+      onStop,
+      {
+        onLayoutChange,
+        onCursorLockChange,
+        background = false,
+      } = {},
+    ) {
       editorModeBeforeRuntime = isEditorMode;
       applyEditorMode(false);
       lookController.cancel();
@@ -428,7 +507,7 @@ export async function createViewportEngine(canvas) {
           api.stopRuntime();
           onStop?.();
         },
-        { onLayoutChange, onCursorLockChange },
+        { onLayoutChange, onCursorLockChange, background },
       );
 
       if (!started) {
@@ -454,6 +533,10 @@ export async function createViewportEngine(canvas) {
 
     setLiteMode(value) {
       applyLiteMode(value);
+    },
+
+    setUltraLiteMode(value) {
+      applyUltraLiteMode(value);
     },
 
     setSelectedObjectName(name) {

@@ -11,6 +11,7 @@ import MediaGallery from "./components/MediaGallery.jsx";
 import AssetLibrary from "./components/AssetLibrary.jsx";
 import ContactForm from "./components/ContactForm.jsx";
 import EditorFileMenu from "./components/EditorFileMenu.jsx";
+import RenderModeMenu from "./components/RenderModeMenu.jsx";
 import AssetLibraryHint from "./components/AssetLibraryHint.jsx";
 import ShortcutsModal from "./components/ShortcutsModal.jsx";
 import LoadingScreen from "./components/LoadingScreen.jsx";
@@ -29,6 +30,10 @@ import {
   DEFAULT_DEMO_URL,
   RIGHT_TAB_DETAILS,
   RIGHT_TAB_EDIT,
+  RENDER_MODE_LITE,
+  RENDER_MODE_NATIVE,
+  RENDER_MODE_NO_VIEWPORT,
+  RENDER_MODE_ULTRA_LITE,
   TAB_CONTACT,
   TAB_DEMO,
   TAB_MEDIA,
@@ -43,7 +48,7 @@ const TAB_ORDER = [TAB_VIEWPORT, TAB_MEDIA, TAB_DEMO, TAB_CONTACT];
 export default function App() {
   const [activeTab, setActiveTab] = useState(TAB_VIEWPORT);
   const [editorMode, setEditorMode] = useState(false);
-  const [liteMode, setLiteMode] = useState(false);
+  const [renderMode, setRenderMode] = useState(RENDER_MODE_NATIVE);
   const [rightTab, setRightTab] = useState(RIGHT_TAB_DETAILS);
   const [transformOn, setTransformOn] = useState(false);
   const [transformMode, setTransformMode] = useState(TRANSFORM_TRANSLATE);
@@ -51,13 +56,38 @@ export default function App() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [demoUrl, setDemoUrl] = useState(DEFAULT_DEMO_URL);
   const [runtimeMode, setRuntimeMode] = useState(false);
+  const [runtimeLaunchPending, setRuntimeLaunchPending] = useState(false);
   const [runtimeLayout, setRuntimeLayout] = useState("wasd");
   const [runtimeCursorLocked, setRuntimeCursorLocked] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState({ phase: "Initializing engine…", loaded: 0, total: 0 });
+  const [modeLoadingProgress, setModeLoadingProgress] = useState(null);
   const [statusMessage, setStatusMessage] = useState("Static portfolio ready.");
 
   // Ref to skip handleClearSelection on initial mount
   const isInitialMount = useRef(true);
+
+  const noViewportMode = renderMode === RENDER_MODE_NO_VIEWPORT;
+  const liteMode = renderMode !== RENDER_MODE_NATIVE;
+  const ultraLiteMode = renderMode === RENDER_MODE_ULTRA_LITE || noViewportMode;
+  const baseTab = noViewportMode ? TAB_MEDIA : TAB_VIEWPORT;
+  const runtimeUiMode = runtimeMode;
+  const displayedTab = runtimeUiMode ? TAB_VIEWPORT : activeTab;
+  const shouldMountViewport = !noViewportMode || runtimeMode || runtimeLaunchPending;
+
+  const setResolvedActiveTab = useCallback((nextValue) => {
+    setActiveTab((current) => {
+      const resolved =
+        typeof nextValue === "function"
+          ? nextValue(current)
+          : nextValue;
+
+      if (noViewportMode && resolved === TAB_VIEWPORT) {
+        return TAB_MEDIA;
+      }
+
+      return resolved;
+    });
+  }, [noViewportMode]);
 
   const {
     viewportApiRef,
@@ -78,7 +108,7 @@ export default function App() {
     pushUndo,
     bindViewportApi,
   } = useSceneEditor({
-    setActiveTab,
+    setActiveTab: setResolvedActiveTab,
     setRightTab,
     setHealthMessage: setStatusMessage,
   });
@@ -99,7 +129,7 @@ export default function App() {
     viewportApiRef,
     rightTab,
     setRightTab,
-    setActiveTab,
+    setActiveTab: setResolvedActiveTab,
     setHealthMessage: setStatusMessage,
     setSelectedSceneObjectName,
   });
@@ -108,9 +138,13 @@ export default function App() {
   const effectiveEditorMode = editorMode && !liteMode;
   const shouldShowEditPanel = effectiveEditorMode && rightTab === RIGHT_TAB_EDIT;
 
-  useViewportSync({ viewportApiRef, activeTab });
+  useViewportSync({ viewportApiRef, activeTab: displayedTab });
 
-  const canUseAssetLibrary = effectiveEditorMode && activeTab === TAB_VIEWPORT && !runtimeMode;
+  const canUseAssetLibrary =
+    effectiveEditorMode &&
+    activeTab === TAB_VIEWPORT &&
+    !runtimeUiMode &&
+    !noViewportMode;
 
   useKeyboardShortcuts({
     enabled: canUseAssetLibrary,
@@ -167,6 +201,13 @@ export default function App() {
   }, [liteMode, editorMode]);
 
   useEffect(() => {
+    if (!noViewportMode) return;
+    if (activeTab !== TAB_VIEWPORT) return;
+
+    setResolvedActiveTab(TAB_MEDIA);
+  }, [activeTab, noViewportMode, setResolvedActiveTab]);
+
+  useEffect(() => {
     // Skip on initial mount
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -178,6 +219,7 @@ export default function App() {
       if (runtimeMode) {
         viewportApiRef.current?.stopRuntime?.();
         setRuntimeMode(false);
+        setRuntimeLaunchPending(false);
       }
       setTransformOn(false);
       setSelectedSceneObjectName(null);
@@ -208,10 +250,85 @@ export default function App() {
     setAssetLibraryOpen((v) => !v);
   };
 
+  const handleRuntimeStopped = useCallback(() => {
+    setRuntimeMode(false);
+    setRuntimeLaunchPending(false);
+    setModeLoadingProgress(null);
+  }, []);
+
+  useEffect(() => {
+    if (noViewportMode) return;
+    if (!runtimeLaunchPending) return;
+
+    setRuntimeLaunchPending(false);
+    setModeLoadingProgress(null);
+  }, [
+    noViewportMode,
+    runtimeLaunchPending,
+  ]);
+
+  useEffect(() => {
+    if (!runtimeLaunchPending) return;
+    if (runtimeMode) return;
+    if (loadingProgress) return;
+
+    const api = viewportApiRef.current;
+    if (!api?.startRuntime) return;
+
+    const started = api.startRuntime?.("who_i_am", handleRuntimeStopped, {
+      onLayoutChange: setRuntimeLayout,
+      onCursorLockChange: setRuntimeCursorLocked,
+    });
+
+    if (!started) {
+      setRuntimeLaunchPending(false);
+      setModeLoadingProgress(null);
+      setStatusMessage("Runtime start failed.");
+      return;
+    }
+
+    setRuntimeMode(true);
+    setModeLoadingProgress(null);
+  }, [
+    handleRuntimeStopped,
+    loadingProgress,
+    runtimeLaunchPending,
+    runtimeMode,
+    sceneReloadToken,
+    viewportApiRef,
+  ]);
+
+  const handleRenderModeChange = useCallback((nextMode) => {
+    setRenderMode(nextMode);
+
+    if (nextMode === RENDER_MODE_NO_VIEWPORT) {
+      setActiveTab(TAB_MEDIA);
+    } else if (!runtimeMode) {
+      setRuntimeLaunchPending(false);
+      setModeLoadingProgress(null);
+    }
+
+    switch (nextMode) {
+      case RENDER_MODE_LITE:
+        setStatusMessage("Lite mode enabled.");
+        break;
+      case RENDER_MODE_ULTRA_LITE:
+        setStatusMessage("Ultra lite mode enabled.");
+        break;
+      case RENDER_MODE_NO_VIEWPORT:
+        setStatusMessage("No viewport mode enabled.");
+        break;
+      case RENDER_MODE_NATIVE:
+      default:
+        setStatusMessage("Lite mode disabled.");
+        break;
+    }
+  }, [runtimeMode]);
+
   const openDemoForNode = (node) => {
     if (!node?.demoUrl) return;
     setDemoUrl(node.demoUrl);
-    setActiveTab(TAB_DEMO);
+    setResolvedActiveTab(TAB_DEMO);
   };
 
   const initialTarget = useMemo(
@@ -219,17 +336,17 @@ export default function App() {
     [editedItem]
   );
 
-  const tabIndex = TAB_ORDER.indexOf(activeTab);
+  const tabIndex = TAB_ORDER.indexOf(displayedTab);
 
   // Keep the outgoing tab rendered during the slide transition
   // Updated synchronously during render to avoid flicker
   const leavingTabRef = useRef(null);
   const [, forceRender] = useState(0);
-  const prevTabRef = useRef(activeTab);
+  const prevTabRef = useRef(displayedTab);
 
-  if (prevTabRef.current !== activeTab) {
+  if (prevTabRef.current !== displayedTab) {
     leavingTabRef.current = prevTabRef.current;
-    prevTabRef.current = activeTab;
+    prevTabRef.current = displayedTab;
   }
 
   const handleSlideTransitionEnd = useCallback(() => {
@@ -240,16 +357,17 @@ export default function App() {
   }, []);
 
   const shouldRender = useCallback(
-    (tab) => activeTab === tab || leavingTabRef.current === tab,
-    [activeTab]
+    (tab) => displayedTab === tab || leavingTabRef.current === tab,
+    [displayedTab]
   );
 
   function exitRuntime() {
     if (!runtimeMode) return;
     viewportApiRef.current?.stopRuntime?.();
-    setRuntimeMode(false);
+    handleRuntimeStopped();
   }
 
+  const visibleLoadingProgress = loadingProgress || modeLoadingProgress;
   const isLoading = !!loadingProgress;
 
   return (
@@ -259,22 +377,13 @@ export default function App() {
           <img src={logo} alt="Logo" className="logo" />
           <span className="brand">AMery Engine</span>
 
+          <RenderModeMenu
+            value={renderMode}
+            onChange={handleRenderModeChange}
+          />
+
           {!isLoading && (
             <>
-              <button
-                className={"btn btn--ghost" + (liteMode ? " active" : "")}
-                aria-pressed={liteMode}
-                onClick={() => {
-                  setLiteMode((value) => {
-                    const nextValue = !value;
-                    setStatusMessage(nextValue ? "Lite mode enabled." : "Lite mode disabled.");
-                    return nextValue;
-                  });
-                }}
-              >
-                {liteMode ? "Lite Mode ✓" : "Lite Mode"}
-              </button>
-
               {!liteMode && (
                 <button
                   className="btn btn--ghost"
@@ -286,7 +395,7 @@ export default function App() {
               )}
 
               <EditorFileMenu
-                editorMode={effectiveEditorMode && !runtimeMode}
+                editorMode={effectiveEditorMode && !runtimeUiMode}
                 onFilePicked={(e) => {
                   const file = e.target.files?.[0];
                   if (!file) return;
@@ -300,15 +409,16 @@ export default function App() {
                 onClick={(e) => {
                   if (runtimeMode) {
                     viewportApiRef.current?.stopRuntime?.();
-                    setRuntimeMode(false);
+                    handleRuntimeStopped();
+                  } else if (noViewportMode) {
+                    setModeLoadingProgress({ phase: "Initializing runtime…" });
+                    setRuntimeLaunchPending(true);
                   } else {
-                    const ok = viewportApiRef.current?.startRuntime?.("who_i_am", () => {
-                      setRuntimeMode(false);
-                    }, {
+                    const ok = viewportApiRef.current?.startRuntime?.("who_i_am", handleRuntimeStopped, {
                       onLayoutChange: setRuntimeLayout,
                       onCursorLockChange: setRuntimeCursorLocked,
                     });
-                    if (ok) { setRuntimeMode(true); setActiveTab(TAB_VIEWPORT); }
+                    if (ok) { setRuntimeMode(true); setResolvedActiveTab(TAB_VIEWPORT); }
                   }
                   e.currentTarget.blur();
                 }}
@@ -335,17 +445,17 @@ export default function App() {
           </a>
 
           {!isLoading && (
-            <button className="btn" onClick={() => { exitRuntime(); setActiveTab(TAB_CONTACT); }}>
+            <button className="btn" onClick={() => { exitRuntime(); setResolvedActiveTab(TAB_CONTACT); }}>
               Contact me
             </button>
           )}
         </div>
       </header>
 
-      <div className={`main3${runtimeMode || loadingProgress ? " main3--runtime" : ""}`}>
-        {loadingProgress && <LoadingScreen progress={loadingProgress} />}
+      <div className={`main3${runtimeUiMode || loadingProgress ? " main3--runtime" : ""}`}>
+        {visibleLoadingProgress && <LoadingScreen progress={visibleLoadingProgress} />}
         <aside className="dock left">
-          {!runtimeMode && (
+          {!runtimeUiMode && (
           <section className="panel">
             <div className="panel__title">Outliner</div>
             <Outliner
@@ -363,15 +473,17 @@ export default function App() {
 
         <section className="center">
           <div className="centerTop">
-            {!runtimeMode && (
+            {!runtimeUiMode && (
             <Tabs
               activeTab={activeTab}
-              onChangeTab={setActiveTab}
-              canOpenMedia={nodeHasMedia(selectedNode)}
+              onChangeTab={setResolvedActiveTab}
+              canOpenMedia={noViewportMode ? true : nodeHasMedia(selectedNode)}
+              baseTab={baseTab}
+              viewportDisabled={noViewportMode}
             />
             )}
 
-            {canUseAssetLibrary && !runtimeMode && (
+            {canUseAssetLibrary && !runtimeUiMode && (
               <>
                 <button
                   className="btn centerTop__AssetLibraryBtn"
@@ -412,52 +524,55 @@ export default function App() {
                 >
                   <div className="viewportMain">
                     <div className="tabContent">
-                      <Viewport
-                        active={activeTab === TAB_VIEWPORT}
-                        selectedTargetName={editedItem?.target || null}
-                        editorMode={effectiveEditorMode}
-                        liteMode={liteMode}
-                        runtimeMode={runtimeMode}
-                        runtimeLayout={runtimeLayout}
-                        runtimeCursorLocked={runtimeCursorLocked}
-                        transformOn={transformOn}
-                        transformMode={transformMode}
-                        setTransformMode={setTransformMode}
-                        sceneUrl={sceneUrl}
-                        sceneFile={sceneFile}
-                        reloadToken={sceneReloadToken}
-                        onReady={(api) => bindViewportApi(api, initialTarget)}
-                        onLoadingChange={setLoadingProgress}
-                        onSceneLoaded={(snapshot) => {
-                          setSceneObjects(snapshot?.objects || []);
-                          if (selectedSceneObjectName && snapshot?.objects) {
-                            const stillExists = snapshot.objects.some((o) => o.name === selectedSceneObjectName);
-                            if (!stillExists) {
+                      {shouldMountViewport && (
+                        <Viewport
+                          active={displayedTab === TAB_VIEWPORT}
+                          selectedTargetName={editedItem?.target || null}
+                          editorMode={effectiveEditorMode}
+                          liteMode={liteMode}
+                          ultraLiteMode={ultraLiteMode}
+                          runtimeMode={runtimeMode}
+                          runtimeLayout={runtimeLayout}
+                          runtimeCursorLocked={runtimeCursorLocked}
+                          transformOn={transformOn}
+                          transformMode={transformMode}
+                          setTransformMode={setTransformMode}
+                          sceneUrl={sceneUrl}
+                          sceneFile={sceneFile}
+                          reloadToken={sceneReloadToken}
+                          onReady={(api) => bindViewportApi(api, initialTarget)}
+                          onLoadingChange={setLoadingProgress}
+                          onSceneLoaded={(snapshot) => {
+                            setSceneObjects(snapshot?.objects || []);
+                            if (selectedSceneObjectName && snapshot?.objects) {
+                              const stillExists = snapshot.objects.some((o) => o.name === selectedSceneObjectName);
+                              if (!stillExists) {
+                                setSelectedSceneObjectName(null);
+                              }
+                            } else if (!snapshot?.objects?.length) {
                               setSelectedSceneObjectName(null);
                             }
-                          } else if (!snapshot?.objects?.length) {
-                            setSelectedSceneObjectName(null);
-                          }
-                        }}
-                        onPickTargetName={(targetName) => {
-                          const node = NODES.find((n) => n.target === targetName);
-                          if (node) {
-                            selectNode(node.id, { focus: false, trackHistory: true });
-                          } else {
-                            selectSceneObject(targetName, { focus: false });
-                          }
-                        }}
-                        onClearSelection={handleClearSelection}
-                        onObjectAdded={(name) => pushUndo({ type: 'add', name })}
-                      />
+                          }}
+                          onPickTargetName={(targetName) => {
+                            const node = NODES.find((n) => n.target === targetName);
+                            if (node) {
+                              selectNode(node.id, { focus: false, trackHistory: true });
+                            } else {
+                              selectSceneObject(targetName, { focus: false });
+                            }
+                          }}
+                          onClearSelection={handleClearSelection}
+                          onObjectAdded={(name) => pushUndo({ type: 'add', name })}
+                        />
+                      )}
 
-                      {canUseAssetLibrary && !runtimeMode && !AssetLibraryOpen && (
+                      {canUseAssetLibrary && !runtimeUiMode && !AssetLibraryOpen && (
                         <AssetLibraryHint onToggle={toggleAssetLibrary} />
                       )}
                     </div>
                   </div>
 
-                  {canUseAssetLibrary && AssetLibraryOpen && !runtimeMode && (
+                  {canUseAssetLibrary && AssetLibraryOpen && !runtimeUiMode && (
                     <AssetLibrary onClose={() => setAssetLibraryOpen(false)} />
                   )}
                 </div>
@@ -485,9 +600,9 @@ export default function App() {
                         <span>Demo</span>
                         <button
                           className="btn btn--ghost"
-                          onClick={() => setActiveTab(TAB_VIEWPORT)}
+                          onClick={() => setResolvedActiveTab(baseTab)}
                         >
-                          Retour Viewport
+                          {baseTab === TAB_MEDIA ? "Retour Media" : "Retour Viewport"}
                         </button>
                       </div>
                       <iframe
@@ -514,7 +629,7 @@ export default function App() {
         </section>
 
         <aside className="dock right">
-          {!runtimeMode && (
+          {!runtimeUiMode && (
           <section className="panel">
             {!shouldShowEditPanel ? (
               <Details
@@ -535,7 +650,7 @@ export default function App() {
                 setTransformMode={setTransformMode}
                 onOpenEdit={() => {
                   setRightTab(RIGHT_TAB_EDIT);
-                  setActiveTab(TAB_VIEWPORT);
+                  setResolvedActiveTab(TAB_VIEWPORT);
                 }}
               />
             ) : (
