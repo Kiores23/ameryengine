@@ -527,6 +527,18 @@ export async function createViewportEngine(canvas) {
       return runtimeController.isActive();
     },
 
+    setRuntimeVirtualMovement(x, y) {
+      runtimeController.setVirtualMovement(x, y);
+    },
+
+    setRuntimeAutoRun(enabled) {
+      runtimeController.setAutoRun(enabled);
+    },
+
+    triggerRuntimeJump() {
+      return runtimeController.triggerJump();
+    },
+
     setEditorMode(value) {
       applyEditorMode(value);
     },

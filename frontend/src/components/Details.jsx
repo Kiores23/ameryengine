@@ -81,6 +81,9 @@ export default function Details({
   canGoBack = false,
   canGoForward = false,
   typesConfig = OUTLINER_TYPES,
+  hideDefaultHeader = false,
+  headerContent = null,
+  subbarContent = null,
 }) {
   const groupedTags = useMemo(() => {
     if (!node?.tags?.length) return [];
@@ -154,33 +157,45 @@ export default function Details({
 
   return (
     <>
-      <div className="panel__title detailsPanelTitle">
-        <div className="detailsPanelTitle__label">Details</div>
-      
-        <div className="detailsPanelTitle__nav">
-          <button
-            type="button"
-            className="detailsNavBtn"
-            onClick={onBack}
-            disabled={!canGoBack}
-            title="Revenir en arrière"
-            aria-label="Revenir en arrière"
-          >
-            ←
-          </button>
-      
-          <button
-            type="button"
-            className="detailsNavBtn"
-            onClick={onForward}
-            disabled={!canGoForward}
-            title="Aller en avant"
-            aria-label="Aller en avant"
-          >
-            →
-          </button>
+      {!hideDefaultHeader ? (
+        <div className="panel__title detailsPanelTitle">
+          <div className="detailsPanelTitle__label">Details</div>
+        
+          <div className="detailsPanelTitle__nav">
+            <button
+              type="button"
+              className="detailsNavBtn"
+              onClick={onBack}
+              disabled={!canGoBack}
+              title="Revenir en arrière"
+              aria-label="Revenir en arrière"
+            >
+              ←
+            </button>
+        
+            <button
+              type="button"
+              className="detailsNavBtn"
+              onClick={onForward}
+              disabled={!canGoForward}
+              title="Aller en avant"
+              aria-label="Aller en avant"
+            >
+              →
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
+
+      {headerContent ? (
+        <div className="panel__title mobilePanelHeader">
+          {headerContent}
+        </div>
+      ) : subbarContent ? (
+        <div className="panel__subbar mobilePanelSubbar">
+          {subbarContent}
+        </div>
+      ) : null}
 
       <div className="panel__body">
         {!node ? (

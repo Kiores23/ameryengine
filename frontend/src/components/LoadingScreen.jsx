@@ -13,7 +13,7 @@ function inferPhaseProgress(phase) {
   return 20;
 }
 
-export default function LoadingScreen({ progress }) {
+export default function LoadingScreen({ progress, className = "" }) {
   if (!progress) return null;
 
   const { phase, loaded, total } = progress;
@@ -22,7 +22,7 @@ export default function LoadingScreen({ progress }) {
     : inferPhaseProgress(phase);
 
   return (
-    <div className="loadingScreen">
+    <div className={`loadingScreen${className ? ` ${className}` : ""}`}>
       <div className="loadingScreen__content">
         <div className="loadingScreen__spinner" />
 

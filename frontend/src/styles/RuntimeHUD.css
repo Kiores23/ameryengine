@@ -7,6 +7,75 @@
   user-select: none;
 }
 
+.runtime-rotateHint {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, calc(100% - 32px));
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(10, 8, 14, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+  animation: runtimeRotateHintFloat 2.4s ease-in-out infinite;
+}
+
+.runtime-rotateHint--mobile {
+  top: 14px;
+  z-index: 4;
+}
+
+.runtime-rotateHint__phone {
+  width: 28px;
+  height: 48px;
+  padding: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 10px;
+  transform-origin: center center;
+  animation: runtimeRotatePhone 1.35s ease-in-out infinite;
+}
+
+.runtime-rotateHint__screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 79, 216, 0.75),
+    rgba(255, 155, 231, 0.35)
+  );
+}
+
+.runtime-rotateHint__arrow {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.78);
+  animation: runtimeRotateArrow 1.35s ease-in-out infinite;
+}
+
+.runtime-rotateHint__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+}
+
+.runtime-rotateHint__text strong {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.runtime-rotateHint__text span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
 /* ─── Key cap ─────────────────────────────────────────────────── */
 
 .hud-key {
@@ -133,4 +202,320 @@
   font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
+}
+
+/* ─── Mobile HUD ──────────────────────────────────────────────── */
+
+.runtime-mobileHud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.runtime-mobileHud__bar {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  padding:
+    18px
+    max(16px, env(safe-area-inset-right))
+    calc(18px + env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+}
+
+.runtime-mobileHud__cluster {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.runtime-mobileHud__cluster--left {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.runtime-mobileHud__cluster--right {
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.runtime-mobileHud__joystick {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  border: none;
+  border-radius: 999px;
+  pointer-events: auto;
+  touch-action: none;
+  background: transparent;
+}
+
+.runtime-mobileHud__joystickHalo,
+.runtime-mobileHud__joystickRing,
+.runtime-mobileHud__joystickThumb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+}
+
+.runtime-mobileHud__joystickHalo {
+  width: 108px;
+  height: 108px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 79, 216, 0.14) 0%,
+    rgba(255, 79, 216, 0.08) 42%,
+    rgba(5, 4, 8, 0.18) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 28px rgba(0, 0, 0, 0.28);
+}
+
+.runtime-mobileHud__joystickRing {
+  width: 84px;
+  height: 84px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.05), transparent 48%),
+    rgba(10, 8, 14, 0.72);
+  box-shadow: inset 0 1px 10px rgba(255, 255, 255, 0.04);
+}
+
+.runtime-mobileHud__joystickThumb {
+  width: 42px;
+  height: 42px;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.36), transparent 35%),
+    linear-gradient(180deg, rgba(255, 79, 216, 0.72), rgba(120, 34, 110, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: transform 90ms ease;
+}
+
+.runtime-mobileHud__joystick.is-active .runtime-mobileHud__joystickHalo {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 79, 216, 0.18);
+}
+
+.runtime-mobileHud__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  background: rgba(10, 8, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.runtime-mobileHud__captionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.runtime-mobileHud__captionValue {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.runtime-mobileHud__actionBtn {
+  min-width: 120px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(29, 23, 40, 0.94), rgba(12, 10, 18, 0.92));
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  pointer-events: auto;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.runtime-mobileHud__actionBtn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.runtime-mobileHud__actionBtn--jump {
+  min-height: 84px;
+  justify-content: center;
+}
+
+.runtime-mobileHud__actionBtn--run {
+  min-height: 68px;
+}
+
+.runtime-mobileHud__actionBtn--run.is-active {
+  border-color: rgba(255, 79, 216, 0.32);
+  background:
+    linear-gradient(180deg, rgba(62, 27, 66, 0.96), rgba(22, 12, 28, 0.94));
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 79, 216, 0.1);
+}
+
+.runtime-mobileHud__actionEyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.runtime-mobileHud__actionLabel {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.98);
+}
+
+/* ─── Animations ──────────────────────────────────────────────── */
+
+@keyframes runtimeRotatePhone {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  35% {
+    transform: rotate(0deg) scale(1.02);
+  }
+  65% {
+    transform: rotate(90deg) scale(1.02);
+  }
+}
+
+@keyframes runtimeRotateArrow {
+  0%,
+  100% {
+    transform: rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: rotate(90deg);
+    opacity: 1;
+  }
+}
+
+@keyframes runtimeRotateHintFloat {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .hud-top-left {
+    top: 12px;
+    left: 12px;
+  }
+
+  .hud-bottom {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .runtime-mobileHud__bar {
+    gap: 12px;
+    padding:
+      16px
+      max(12px, env(safe-area-inset-right))
+      calc(16px + env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+  }
+
+  .runtime-mobileHud__cluster {
+    gap: 10px;
+  }
+
+  .runtime-mobileHud__joystick {
+    width: 96px;
+    height: 96px;
+  }
+
+  .runtime-mobileHud__joystickHalo {
+    width: 96px;
+    height: 96px;
+  }
+
+  .runtime-mobileHud__joystickRing {
+    width: 74px;
+    height: 74px;
+  }
+
+  .runtime-mobileHud__joystickThumb {
+    width: 38px;
+    height: 38px;
+  }
+
+  .runtime-mobileHud__caption {
+    padding: 8px 10px;
+    margin-bottom: 4px;
+  }
+
+  .runtime-mobileHud__actionBtn {
+    min-width: 110px;
+    padding: 11px 12px;
+    border-radius: 16px;
+  }
+
+  .runtime-mobileHud__actionBtn--jump {
+    min-height: 76px;
+  }
+
+  .runtime-mobileHud__actionBtn--run {
+    min-height: 62px;
+  }
+
+  .runtime-mobileHud__actionLabel {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .runtime-mobileHud__caption {
+    display: none;
+  }
+
+  .runtime-mobileHud__actionBtn {
+    min-width: 104px;
+  }
+
+  .runtime-rotateHint--mobile {
+    width: min(280px, calc(100% - 24px));
+    top: 12px;
+  }
 }

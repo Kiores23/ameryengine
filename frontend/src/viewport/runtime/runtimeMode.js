@@ -40,6 +40,9 @@ export function createRuntimeController() {
   let yaw   = 0;
   let pitch = 0.3;
   let jumpPressedAt = -Infinity; // timestamp of last Space press (while grounded)
+  let virtualMoveX = 0;
+  let virtualMoveY = 0;
+  let autoRun = false;
 
   // ── Input layout: 'wasd' | 'zqsd' (auto-detected, switchable at any time) ──
   let layout = 'wasd';
@@ -52,6 +55,9 @@ export function createRuntimeController() {
   function resetInputs() {
     for (const k in keys) keys[k] = false;
     jumpPressedAt = -Infinity;
+    virtualMoveX = 0;
+    virtualMoveY = 0;
+    autoRun = false;
   }
 
   function resetCharacterAnimation(targetCharacter = character) {
@@ -137,6 +143,25 @@ export function createRuntimeController() {
         if (p instanceof Promise) p.catch(() => {});
       } catch (_) {}
     }
+  }
+
+  function setVirtualMovement(x = 0, y = 0) {
+    virtualMoveX = THREE.MathUtils.clamp(Number(x) || 0, -1, 1);
+    virtualMoveY = THREE.MathUtils.clamp(Number(y) || 0, -1, 1);
+  }
+
+  function setAutoRun(enabled) {
+    autoRun = enabled === true;
+  }
+
+  function triggerJump() {
+    if (!active) return false;
+    if (!physics.isGrounded) return false;
+    if (jumpPressedAt >= 0) return false;
+
+    jumpPressedAt = performance.now() / 1000;
+    _playAnim("Regular_Jump");
+    return true;
   }
 
   // ── Lifecycle ──────────────────────────
@@ -327,9 +352,13 @@ export function createRuntimeController() {
     if (keys[backKey] || keys["ArrowDown"])  _moveDir.add(_fwd);
     if (keys[leftKey])                       _moveDir.sub(_right);
     if (keys[rightKey])                      _moveDir.add(_right);
+    if (Math.abs(virtualMoveX) > 0.01 || Math.abs(virtualMoveY) > 0.01) {
+      _moveDir.addScaledVector(_right, virtualMoveX);
+      _moveDir.addScaledVector(_fwd, virtualMoveY);
+    }
 
     const isMoving = _moveDir.lengthSq() > 0.001;
-    const isRunning = isMoving && (keys["ShiftLeft"] || keys["ShiftRight"]);
+    const isRunning = isMoving && (keys["ShiftLeft"] || keys["ShiftRight"] || autoRun);
     let dx = 0, dz = 0;
 
     // Scale speed by character height
@@ -432,5 +461,8 @@ export function createRuntimeController() {
     getCharacter,
     pushCharacter,
     syncAfterExternalMovement,
+    setVirtualMovement,
+    setAutoRun,
+    triggerJump,
   };
 }

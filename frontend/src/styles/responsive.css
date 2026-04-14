@@ -29,10 +29,41 @@
   }
 }
 
-/* Mobile */
-@media (max-width: 640px) {
+/* Mobile + tablette compacte */
+@media (max-width: 1024px) {
+  .main3 {
+    min-height: 0;
+  }
+
   .toolbar {
     padding: 0 8px;
+  }
+
+  .toolbar--mobile {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .toolbar--mobile .toolbar__left,
+  .toolbar--mobile .toolbar__right {
+    flex-wrap: nowrap;
+  }
+
+  .toolbar--mobile .toolbar__left {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .toolbar--mobile .toolbar__right {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .toolbar--mobile .brand {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .toolbar__left,
@@ -53,5 +84,212 @@
   .bottomDock {
     padding-left: 8px;
     padding-right: 8px;
+  }
+
+  .center--mobile {
+    min-height: 0;
+    padding: 10px;
+  }
+
+  .mobileMainWrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .mobileMainPanel {
+    position: relative;
+    height: 100%;
+  }
+
+  .mobileMainPanel--runtime {
+    border-radius: 0;
+    border: none;
+    background: transparent;
+  }
+
+  .mobileMainPanel--runtime > .panel__title,
+  .mobileMainPanel--runtime > .panel__subbar {
+    display: none;
+  }
+
+  .mobileMainPanel--runtime > .panel__body,
+  .mobileMainPanel--runtime .mobilePanelBody {
+    padding: 0;
+  }
+
+  .mobilePanelHeader {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .mobileMainPanel > .panel__subbar {
+    justify-content: flex-start;
+  }
+
+  .mobilePrimaryNav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .mobilePanelSubbar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .mobilePanelSwitcher {
+    width: auto;
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    min-width: 0;
+  }
+
+  .mobilePanelSwitcher::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .mobilePanelSwitcher .tab,
+  .mobilePanelSwitcher .btn {
+    flex: 0 0 auto;
+  }
+
+  .mobilePanelBody {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .mobileOutlinerToggle {
+    width: 34px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(21, 17, 29, 0.7);
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .mobileOutlinerToggle--inline {
+    position: static;
+    z-index: auto;
+    flex: 0 0 auto;
+  }
+
+  .mobileOutlinerToggle span {
+    display: block;
+    width: 14px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--text);
+  }
+
+  .mobileOutlinerBackdrop {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 15;
+  }
+
+  .mobileOutlinerBackdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobileOutlinerDrawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 340px);
+    z-index: 20;
+    transform: translateX(calc(-100% - 14px));
+    transition: transform 220ms ease;
+  }
+
+  .mobileOutlinerDrawer.is-open {
+    transform: translateX(0);
+  }
+
+  .mobileOutlinerPanel {
+    height: 100%;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+    background: var(--panel);
+  }
+
+  .mobileOutlinerPanel__title {
+    justify-content: space-between;
+    background: var(--panel2);
+  }
+
+  .mobileOutlinerPanel .panel__body,
+  .mobileOutlinerPanel .outliner {
+    background: var(--panel);
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .mobileOutlinerPanel .ogroup,
+  .mobileOutlinerPanel .rootBlock {
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .mobileOutlinerPanel .ogroup {
+    background: #1c1625;
+  }
+
+  .mobileOutlinerPanel .oheader {
+    background: #241d2f;
+  }
+
+  .mobileOutlinerPanel .osubheader {
+    background: #1f1929;
+  }
+
+  .mobileOutlinerPanel .osubheader--nested {
+    background: #191420;
+  }
+
+  .mobileOutlinerPanel .obadge {
+    background: #17121f;
+  }
+
+  .mobileOutlinerPanel .orow {
+    min-height: 38px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .mobileOutlinerPanel .obody {
+    padding-bottom: 6px;
+  }
+
+  .mobileOutlinerPanel .obody .orow {
+    padding-left: 22px;
+  }
+
+  .mobileOutlinerPanel .onode {
+    border-top-color: rgba(255, 255, 255, 0.045);
+  }
+
+  .mobileOutlinerPanel .otext {
+    font-size: 14px;
   }
 }

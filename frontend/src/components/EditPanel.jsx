@@ -168,6 +168,7 @@ export default function EditPanel({
   setTransformMode,
   viewportApiRef,
   pushUndo,
+  subbarContent = null,
 }) {
   if (!node) return null;
 
@@ -322,6 +323,12 @@ export default function EditPanel({
           </button>
         </div>
       </div>
+
+      {subbarContent ? (
+        <div className="panel__subbar mobilePanelSubbar">
+          {subbarContent}
+        </div>
+      ) : null}
 
       <div className="panel__body">
         <div className="detailsCard editCard">

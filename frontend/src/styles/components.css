@@ -50,6 +50,11 @@
   gap: 6px;
 }
 
+.panel__body--flush {
+  padding: 0;
+  gap: 0;
+}
+
 .panel__subbar {
   padding: 10px;
   border-bottom: 1px solid var(--line);

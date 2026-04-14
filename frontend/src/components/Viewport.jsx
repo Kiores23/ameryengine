@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createViewportEngine } from "../viewport";
 import { useViewportShortcuts } from "../hooks/useViewportShortcuts";
 import { useKeybindings } from "../context/KeybindingsContext";
@@ -15,6 +15,8 @@ export default function Viewport({
   runtimeMode,
   runtimeLayout = "wasd",
   runtimeCursorLocked = false,
+  showRuntimeRotateHint = false,
+  mobileMode = false,
   transformMode,
   setTransformMode,
   onReady,
@@ -23,6 +25,7 @@ export default function Viewport({
   onSceneLoaded,
   onObjectAdded,
   onLoadingChange,
+  showLoadingOverlay = true,
   sceneUrl = DEFAULT_SCENE_URL,
   sceneFile = null,
   reloadToken = 0,
@@ -35,6 +38,7 @@ export default function Viewport({
   const ultraLiteModeRef = useRef(ultraLiteMode);
   const [engineReady, setEngineReady] = useState(false);
   const [sceneLoading, setSceneLoading] = useState(true);
+  const [runtimeAutoRun, setRuntimeAutoRun] = useState(false);
   const keybindings = useKeybindings();
 
   function getApi() {
@@ -256,6 +260,37 @@ export default function Viewport({
     }
   }, [editorMode, runtimeMode, selectedTargetName, transformMode]);
 
+  useEffect(() => {
+    const api = getApi();
+    if (!api?.setRuntimeVirtualMovement) return;
+
+    if (!runtimeMode) {
+      api.setRuntimeVirtualMovement(0, 0);
+      api.setRuntimeAutoRun?.(false);
+      setRuntimeAutoRun(false);
+    }
+  }, [runtimeMode]);
+
+  const handleRuntimeMove = useCallback((x, y) => {
+    getApi()?.setRuntimeVirtualMovement?.(x, y);
+  }, []);
+
+  const handleRuntimeMoveEnd = useCallback(() => {
+    getApi()?.setRuntimeVirtualMovement?.(0, 0);
+  }, []);
+
+  const handleRuntimeJump = useCallback(() => {
+    getApi()?.triggerRuntimeJump?.();
+  }, []);
+
+  const handleRuntimeAutoRunToggle = useCallback(() => {
+    setRuntimeAutoRun((current) => {
+      const nextValue = !current;
+      getApi()?.setRuntimeAutoRun?.(nextValue);
+      return nextValue;
+    });
+  }, []);
+
   // chargement runtime depuis une URL
   useEffect(() => {
     if (!engineReady) return;
@@ -396,7 +431,7 @@ export default function Viewport({
     >
       <canvas ref={canvasRef} className="viewportCanvas" />
 
-      {(!engineReady || sceneLoading) && (
+      {showLoadingOverlay && (!engineReady || sceneLoading) && (
         <div className="viewportLoading">
           <div className="viewportLoading__spinner" />
           <span className="viewportLoading__text">Loading scene…</span>
@@ -404,7 +439,17 @@ export default function Viewport({
       )}
 
       {runtimeMode && (
-        <RuntimeHUD layout={runtimeLayout} cursorLocked={runtimeCursorLocked} />
+        <RuntimeHUD
+          layout={runtimeLayout}
+          cursorLocked={runtimeCursorLocked}
+          showRotateHint={showRuntimeRotateHint}
+          mobileMode={mobileMode}
+          autoRunEnabled={runtimeAutoRun}
+          onMove={handleRuntimeMove}
+          onMoveEnd={handleRuntimeMoveEnd}
+          onJump={handleRuntimeJump}
+          onToggleAutoRun={handleRuntimeAutoRunToggle}
+        />
       )}
 
       {editorMode && !runtimeMode && (
