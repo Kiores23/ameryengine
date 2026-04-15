@@ -62,15 +62,21 @@ function ArrowKeys() {
 function MobileRuntimeHUD({
   showRotateHint = false,
   autoRunEnabled = false,
+  fullscreenActive = false,
   onMove,
   onMoveEnd,
+  onLook,
   onJump,
+  onToggleFullscreen,
   onToggleAutoRun,
 }) {
   const baseRef = useRef(null);
   const activePointerIdRef = useRef(null);
+  const lookPointerIdRef = useRef(null);
+  const lookPositionRef = useRef({ x: 0, y: 0 });
   const [stickPosition, setStickPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [showRotatePrompt, setShowRotatePrompt] = useState(showRotateHint);
 
   const applyPointerPosition = useCallback((clientX, clientY) => {
     const base = baseRef.current;
@@ -108,9 +114,24 @@ function MobileRuntimeHUD({
 
   useEffect(() => resetStick, [resetStick]);
 
+  useEffect(() => {
+    if (!showRotateHint) {
+      setShowRotatePrompt(false);
+      return undefined;
+    }
+
+    setShowRotatePrompt(true);
+
+    const timeoutId = window.setTimeout(() => {
+      setShowRotatePrompt(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [showRotateHint]);
+
   return (
     <div className="runtime-mobileHud">
-      {showRotateHint && (
+      {showRotatePrompt && (
         <div className="runtime-rotateHint runtime-rotateHint--mobile">
           <div className="runtime-rotateHint__phone">
             <div className="runtime-rotateHint__screen" />
@@ -122,6 +143,53 @@ function MobileRuntimeHUD({
           </div>
         </div>
       )}
+
+      <div className="runtime-mobileHud__topbar">
+        <button
+          type="button"
+          className={
+            "runtime-mobileHud__utilityBtn" +
+            (fullscreenActive ? " is-active" : "")
+          }
+          onPointerDown={(event) => event.preventDefault()}
+          onClick={() => onToggleFullscreen?.()}
+          aria-pressed={fullscreenActive}
+          aria-label={fullscreenActive ? "Exit fullscreen" : "Enter fullscreen"}
+        >
+          <span className="runtime-mobileHud__fullscreenIcon" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
+      </div>
+
+      <div
+        className="runtime-mobileHud__lookZone"
+        onPointerDown={(event) => {
+          lookPointerIdRef.current = event.pointerId;
+          lookPositionRef.current = { x: event.clientX, y: event.clientY };
+          event.currentTarget.setPointerCapture?.(event.pointerId);
+        }}
+        onPointerMove={(event) => {
+          if (lookPointerIdRef.current !== event.pointerId) return;
+
+          const deltaX = event.clientX - lookPositionRef.current.x;
+          const deltaY = event.clientY - lookPositionRef.current.y;
+          lookPositionRef.current = { x: event.clientX, y: event.clientY };
+          onLook?.(deltaX, deltaY);
+        }}
+        onPointerUp={(event) => {
+          if (lookPointerIdRef.current !== event.pointerId) return;
+          lookPointerIdRef.current = null;
+          event.currentTarget.releasePointerCapture?.(event.pointerId);
+        }}
+        onPointerCancel={(event) => {
+          if (lookPointerIdRef.current !== event.pointerId) return;
+          lookPointerIdRef.current = null;
+        }}
+      />
 
       <div className="runtime-mobileHud__bar">
         <div className="runtime-mobileHud__cluster runtime-mobileHud__cluster--left">
@@ -162,23 +230,21 @@ function MobileRuntimeHUD({
               }}
             />
           </div>
-
-          <div className="runtime-mobileHud__caption">
-            <span className="runtime-mobileHud__captionLabel">Move</span>
-            <span className="runtime-mobileHud__captionValue">Left stick</span>
-          </div>
         </div>
 
         <div className="runtime-mobileHud__cluster runtime-mobileHud__cluster--right">
           <button
             type="button"
             className="runtime-mobileHud__actionBtn runtime-mobileHud__actionBtn--jump"
-            onPointerDown={(event) => event.preventDefault()}
-            onClick={() => onJump?.()}
+            onPointerDown={(event) => {
+              event.preventDefault();
+              onJump?.();
+            }}
             aria-label="Jump"
           >
-            <span className="runtime-mobileHud__actionEyebrow">Action</span>
-            <span className="runtime-mobileHud__actionLabel">Jump</span>
+            <span className="runtime-mobileHud__jumpFace" aria-hidden="true">
+              <span className="runtime-mobileHud__jumpGlyph" />
+            </span>
           </button>
 
           <button
@@ -192,9 +258,6 @@ function MobileRuntimeHUD({
             aria-pressed={autoRunEnabled}
             aria-label={autoRunEnabled ? "Disable auto run" : "Enable auto run"}
           >
-            <span className="runtime-mobileHud__actionEyebrow">
-              {autoRunEnabled ? "Running" : "Movement"}
-            </span>
             <span className="runtime-mobileHud__actionLabel">Auto Run</span>
           </button>
         </div>
@@ -209,9 +272,12 @@ export default function RuntimeHUD({
   showRotateHint = false,
   mobileMode = false,
   autoRunEnabled = false,
+  fullscreenActive = false,
   onMove,
   onMoveEnd,
+  onLook,
   onJump,
+  onToggleFullscreen,
   onToggleAutoRun,
 }) {
   return (
@@ -233,9 +299,12 @@ export default function RuntimeHUD({
         <MobileRuntimeHUD
           showRotateHint={showRotateHint}
           autoRunEnabled={autoRunEnabled}
+          fullscreenActive={fullscreenActive}
           onMove={onMove}
           onMoveEnd={onMoveEnd}
+          onLook={onLook}
           onJump={onJump}
+          onToggleFullscreen={onToggleFullscreen}
           onToggleAutoRun={onToggleAutoRun}
         />
       ) : (

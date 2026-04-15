@@ -1,6 +1,16 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { resolvePublicPath } from "../utils/publicPath";
+
+const MOBILE_BREAKPOINT = 1024;
+
+function getInitialMobileLayout() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+}
 
 function normalizeValue(v) {
   return String(v ?? "").trim().toLowerCase();
@@ -88,6 +98,9 @@ function toYoutubeThumbnail(url) {
 export default function MediaGallery({ node, nodes = [], onSelect }) {
   const [index, setIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(getInitialMobileLayout);
+  const [fullscreenActive, setFullscreenActive] = useState(false);
+  const wrapRef = useRef(null);
   const thumbsRef = useRef(null);
 
   const mediaItems = useMemo(() => {
@@ -125,14 +138,45 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
     setIndex((prev) => (prev + 1) % mediaItems.length);
   };
 
-  const openExpanded = () => {
+  const openExpanded = useCallback(async () => {
     if (!hasMedia) return;
-    setIsExpanded(true);
-  };
 
-  const closeExpanded = () => {
+    setIsExpanded(true);
+    if (!isMobileLayout) return;
+
+    const target = wrapRef.current;
+    if (!target) return;
+
+    try {
+      if (target.requestFullscreen) {
+        await target.requestFullscreen();
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      }
+    } catch (err) {
+      console.warn("[MediaGallery] Failed to enter fullscreen:", err);
+    }
+  }, [hasMedia, isMobileLayout]);
+
+  const closeExpanded = useCallback(async () => {
+    if (
+      typeof document !== "undefined" &&
+      isMobileLayout &&
+      (document.fullscreenElement || document.webkitFullscreenElement)
+    ) {
+      try {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      } catch (err) {
+        console.warn("[MediaGallery] Failed to exit fullscreen:", err);
+      }
+    }
+
     setIsExpanded(false);
-  };
+  }, [isMobileLayout]);
 
   useEffect(() => {
     const el = thumbsRef.current;
@@ -150,16 +194,37 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
   }, [mediaItems.length, isExpanded]);
 
   useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const handleChange = (event) => {
+      setIsMobileLayout(event.matches);
+    };
+
+    setIsMobileLayout(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
     setIndex(0);
-    setIsExpanded(false);
-  }, [node?.id]);
+    void closeExpanded();
+  }, [closeExpanded, node?.id]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
       if (!hasMedia) return;
 
       if (e.key === "Escape") {
-        setIsExpanded(false);
+        void closeExpanded();
       } else if (e.key === "ArrowLeft") {
         goPrev();
       } else if (e.key === "ArrowRight") {
@@ -169,10 +234,10 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [hasMedia, mediaItems.length]);
+  }, [closeExpanded, hasMedia, mediaItems.length]);
 
   useEffect(() => {
-    if (isExpanded) {
+    if (isExpanded && !isMobileLayout) {
       document.body.classList.add("mediaFullscreenOpen");
     } else {
       document.body.classList.remove("mediaFullscreenOpen");
@@ -181,7 +246,31 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
     return () => {
       document.body.classList.remove("mediaFullscreenOpen");
     };
-  }, [isExpanded]);
+  }, [isExpanded, isMobileLayout]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+
+    const updateFullscreenState = () => {
+      const fullscreenElement =
+        document.fullscreenElement || document.webkitFullscreenElement || null;
+      const isCurrentGallery = fullscreenElement === wrapRef.current;
+      setFullscreenActive(isCurrentGallery);
+
+      if (!isCurrentGallery && isMobileLayout) {
+        setIsExpanded(false);
+      }
+    };
+
+    updateFullscreenState();
+    document.addEventListener("fullscreenchange", updateFullscreenState);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenState);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", updateFullscreenState);
+      document.removeEventListener("webkitfullscreenchange", updateFullscreenState);
+    };
+  }, [isMobileLayout]);
 
   useEffect(() => {
     if (!mediaItems.length) {
@@ -213,7 +302,14 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
   }
 
   const gallery = (
-    <div className={"mediaWrap" + (isExpanded ? " mediaWrap--expanded" : "")}>
+    <div
+      ref={wrapRef}
+      className={
+        "mediaWrap" +
+        (isExpanded ? " mediaWrap--expanded" : "") +
+        (fullscreenActive ? " mediaWrap--fullscreen" : "")
+      }
+    >
       <div className="mediaHeader">
         <div>
           <div className="mediaTitle">{node.label}</div>
@@ -317,7 +413,7 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
     </div>
   );
 
-  if (isExpanded && typeof document !== "undefined") {
+  if (isExpanded && !isMobileLayout && typeof document !== "undefined") {
     return createPortal(
       <>
         <button
@@ -334,7 +430,7 @@ export default function MediaGallery({ node, nodes = [], onSelect }) {
 
   return (
     <>
-      {isExpanded && (
+      {isExpanded && !isMobileLayout && (
         <button
           type="button"
           className="mediaOverlay"

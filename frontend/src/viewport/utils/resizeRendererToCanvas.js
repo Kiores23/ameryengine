@@ -1,15 +1,22 @@
-let _prevW = 0;
-let _prevH = 0;
-
 export function resizeRendererToCanvas(renderer, camera, canvas) {
-  const w = canvas.clientWidth;
-  const h = canvas.clientHeight;
+  const w = Math.round(canvas.clientWidth);
+  const h = Math.round(canvas.clientHeight);
   if (!w || !h) return;
-  if (w === _prevW && h === _prevH) return;
 
-  _prevW = w;
-  _prevH = h;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
+  const pixelRatio = renderer.getPixelRatio?.() ?? 1;
+  const targetWidth = Math.round(w * pixelRatio);
+  const targetHeight = Math.round(h * pixelRatio);
+  const needsResize =
+    canvas.width !== targetWidth ||
+    canvas.height !== targetHeight;
+  const nextAspect = w / h;
+
+  if (needsResize) {
+    renderer.setSize(w, h, false);
+  }
+
+  if (needsResize || Math.abs(camera.aspect - nextAspect) > 0.0001) {
+    camera.aspect = nextAspect;
+    camera.updateProjectionMatrix();
+  }
 }

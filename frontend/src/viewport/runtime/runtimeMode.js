@@ -123,6 +123,17 @@ export function createRuntimeController() {
       PITCH_MIN, PITCH_MAX
     );
   }
+
+  function applyLookDelta(deltaX = 0, deltaY = 0) {
+    if (!active) return;
+
+    yaw -= (Number(deltaX) || 0) * MOUSE_SENS;
+    pitch = THREE.MathUtils.clamp(
+      pitch + (Number(deltaY) || 0) * MOUSE_SENS,
+      PITCH_MIN,
+      PITCH_MAX
+    );
+  }
   function onPointerLockChange() {
     const locked = document.pointerLockElement === canvas;
     if (!locked && !_tabReleased && !_focusReleased) {
@@ -464,5 +475,6 @@ export function createRuntimeController() {
     setVirtualMovement,
     setAutoRun,
     triggerJump,
+    applyLookDelta,
   };
 }

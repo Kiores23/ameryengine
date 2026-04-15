@@ -50,7 +50,11 @@ export function createCollisionSystem() {
     _meshData = [];
 
     for (const obj of collidables) {
-      obj.updateMatrixWorld(true);
+      if (typeof obj.updateWorldMatrix === "function") {
+        obj.updateWorldMatrix(true, true);
+      } else {
+        obj.updateMatrixWorld(true);
+      }
       obj.traverse(child => {
         if (!child.isMesh) return;
         const geo = child.geometry;

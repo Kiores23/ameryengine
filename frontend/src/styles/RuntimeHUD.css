@@ -212,6 +212,103 @@
   pointer-events: none;
 }
 
+.runtime-mobileHud__topbar,
+.viewportMobileTopbar {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.runtime-mobileHud__utilityBtn {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(10, 8, 14, 0.52);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.96);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.runtime-mobileHud__utilityBtn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.runtime-mobileHud__utilityBtn.is-active {
+  border-color: rgba(255, 79, 216, 0.28);
+  background: rgba(68, 22, 74, 0.46);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.22),
+    inset 0 0 0 1px rgba(255, 79, 216, 0.1);
+}
+
+.runtime-mobileHud__fullscreenIcon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.runtime-mobileHud__fullscreenIcon span {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: currentColor;
+  border-style: solid;
+}
+
+.runtime-mobileHud__fullscreenIcon span:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: 2px;
+}
+
+.runtime-mobileHud__fullscreenIcon span:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-width: 2px 2px 0 0;
+  border-top-right-radius: 2px;
+}
+
+.runtime-mobileHud__fullscreenIcon span:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  border-width: 0 2px 2px 0;
+  border-bottom-right-radius: 2px;
+}
+
+.runtime-mobileHud__fullscreenIcon span:nth-child(4) {
+  left: 0;
+  bottom: 0;
+  border-width: 0 0 2px 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.runtime-mobileHud__lookZone {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  touch-action: none;
+}
+
 .runtime-mobileHud__bar {
   position: absolute;
   inset: auto 0 0 0;
@@ -224,6 +321,7 @@
     max(16px, env(safe-area-inset-right))
     calc(18px + env(safe-area-inset-bottom))
     max(16px, env(safe-area-inset-left));
+  z-index: 2;
 }
 
 .runtime-mobileHud__cluster {
@@ -235,12 +333,13 @@
 .runtime-mobileHud__cluster--left {
   flex: 1 1 auto;
   min-width: 0;
+  margin-bottom: 48px;
 }
 
 .runtime-mobileHud__cluster--right {
   flex: 0 0 auto;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-end;
 }
 
 .runtime-mobileHud__joystick {
@@ -308,31 +407,6 @@
     0 0 0 1px rgba(255, 79, 216, 0.18);
 }
 
-.runtime-mobileHud__caption {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  border-radius: 14px;
-  background: rgba(10, 8, 14, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-}
-
-.runtime-mobileHud__captionLabel {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.runtime-mobileHud__captionValue {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.62);
-}
-
 .runtime-mobileHud__actionBtn {
   min-width: 120px;
   padding: 12px 14px;
@@ -363,36 +437,104 @@
 }
 
 .runtime-mobileHud__actionBtn--jump {
-  min-height: 84px;
+  width: 88px;
+  min-width: 88px;
+  height: 88px;
+  min-height: 88px;
+  padding: 0;
+  border-radius: 999px;
   justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle, rgba(255, 79, 216, 0.14) 0%, rgba(255, 79, 216, 0.08) 42%, rgba(5, 4, 8, 0.14) 100%);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 28px rgba(0, 0, 0, 0.24);
 }
 
 .runtime-mobileHud__actionBtn--run {
-  min-height: 68px;
+  min-width: 104px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(10, 8, 14, 0.42);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
 }
 
 .runtime-mobileHud__actionBtn--run.is-active {
   border-color: rgba(255, 79, 216, 0.32);
-  background:
-    linear-gradient(180deg, rgba(62, 27, 66, 0.96), rgba(22, 12, 28, 0.94));
+  background: rgba(74, 28, 82, 0.45);
   box-shadow:
-    0 14px 28px rgba(0, 0, 0, 0.28),
+    0 10px 20px rgba(0, 0, 0, 0.18),
     inset 0 0 0 1px rgba(255, 79, 216, 0.1);
 }
 
-.runtime-mobileHud__actionEyebrow {
-  font-size: 10px;
+.runtime-mobileHud__actionLabel {
+  display: inline-block;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.98);
+  text-align: center;
 }
 
-.runtime-mobileHud__actionLabel {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.05;
-  color: rgba(255, 255, 255, 0.98);
+.runtime-mobileHud__jumpFace {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.05), transparent 48%),
+    rgba(10, 8, 14, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 10px rgba(255, 255, 255, 0.04),
+    0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.runtime-mobileHud__jumpGlyph {
+  position: relative;
+  width: 22px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.96);
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 10px rgba(255, 79, 216, 0.16));
+}
+
+.runtime-mobileHud__jumpGlyph::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 3px;
+  height: 17px;
+  background: currentColor;
+  border-radius: 999px;
+  transform: translateX(-50%);
+}
+
+.runtime-mobileHud__jumpGlyph::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  width: 12px;
+  height: 12px;
+  border-top: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+  border-radius: 2px;
+  transform: translateX(-50%) rotate(-45deg);
 }
 
 /* ─── Animations ──────────────────────────────────────────────── */
@@ -448,6 +590,18 @@
 }
 
 @media (max-width: 720px) {
+  .runtime-mobileHud__topbar,
+  .viewportMobileTopbar {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+
+  .runtime-mobileHud__utilityBtn {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+
   .runtime-mobileHud__bar {
     gap: 12px;
     padding:
@@ -459,6 +613,10 @@
 
   .runtime-mobileHud__cluster {
     gap: 10px;
+  }
+
+  .runtime-mobileHud__cluster--left {
+    margin-bottom: 42px;
   }
 
   .runtime-mobileHud__joystick {
@@ -481,37 +639,63 @@
     height: 38px;
   }
 
-  .runtime-mobileHud__caption {
-    padding: 8px 10px;
-    margin-bottom: 4px;
-  }
-
   .runtime-mobileHud__actionBtn {
-    min-width: 110px;
-    padding: 11px 12px;
+    min-width: 100px;
+    padding: 10px 12px;
     border-radius: 16px;
   }
 
   .runtime-mobileHud__actionBtn--jump {
-    min-height: 76px;
+    width: 78px;
+    min-width: 78px;
+    height: 78px;
+    min-height: 78px;
+    padding: 0;
+    border-radius: 999px;
   }
 
   .runtime-mobileHud__actionBtn--run {
-    min-height: 62px;
+    min-width: 96px;
+    min-height: 44px;
   }
 
   .runtime-mobileHud__actionLabel {
-    font-size: 16px;
+    font-size: 13px;
+  }
+
+  .runtime-mobileHud__jumpFace {
+    width: 56px;
+    height: 56px;
+  }
+
+  .runtime-mobileHud__jumpGlyph {
+    width: 20px;
+    height: 25px;
+  }
+
+  .runtime-mobileHud__jumpGlyph::before {
+    height: 15px;
+  }
+
+  .runtime-mobileHud__jumpGlyph::after {
+    width: 11px;
+    height: 11px;
   }
 }
 
 @media (max-width: 560px) {
-  .runtime-mobileHud__caption {
-    display: none;
+  .runtime-mobileHud__utilityBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
   }
 
   .runtime-mobileHud__actionBtn {
-    min-width: 104px;
+    min-width: 92px;
+  }
+
+  .runtime-mobileHud__cluster--left {
+    margin-bottom: 38px;
   }
 
   .runtime-rotateHint--mobile {

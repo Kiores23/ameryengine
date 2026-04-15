@@ -31,6 +31,7 @@ export default function Viewport({
   reloadToken = 0,
 }) {
   const canvasRef = useRef(null);
+  const viewportWrapRef = useRef(null);
   const engineRef = useRef(null);
   const selectedTargetNameRef = useRef(selectedTargetName);
   const effectiveEditorModeRef = useRef(editorMode && !runtimeMode);
@@ -39,6 +40,7 @@ export default function Viewport({
   const [engineReady, setEngineReady] = useState(false);
   const [sceneLoading, setSceneLoading] = useState(true);
   const [runtimeAutoRun, setRuntimeAutoRun] = useState(false);
+  const [fullscreenActive, setFullscreenActive] = useState(false);
   const keybindings = useKeybindings();
 
   function getApi() {
@@ -291,6 +293,59 @@ export default function Viewport({
     });
   }, []);
 
+  const handleRuntimeLook = useCallback((deltaX, deltaY) => {
+    getApi()?.applyRuntimeLookDelta?.(deltaX, deltaY);
+  }, []);
+
+  const handleToggleFullscreen = useCallback(async () => {
+    const target = viewportWrapRef.current;
+    if (!target || typeof document === "undefined") return;
+
+    const doc = document;
+    const fullscreenElement =
+      doc.fullscreenElement || doc.webkitFullscreenElement || null;
+
+    try {
+      if (fullscreenElement === target) {
+        if (doc.exitFullscreen) {
+          await doc.exitFullscreen();
+        } else if (doc.webkitExitFullscreen) {
+          doc.webkitExitFullscreen();
+        }
+        return;
+      }
+
+      if (target.requestFullscreen) {
+        await target.requestFullscreen();
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      }
+    } catch (err) {
+      console.warn("[Viewport] Failed to toggle fullscreen:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+
+    const doc = document;
+    const updateFullscreenState = () => {
+      const target = viewportWrapRef.current;
+      const fullscreenElement =
+        doc.fullscreenElement || doc.webkitFullscreenElement || null;
+      setFullscreenActive(fullscreenElement === target);
+    };
+
+    updateFullscreenState();
+    doc.addEventListener("fullscreenchange", updateFullscreenState);
+    doc.addEventListener("webkitfullscreenchange", updateFullscreenState);
+
+    return () => {
+      doc.removeEventListener("fullscreenchange", updateFullscreenState);
+      doc.removeEventListener("webkitfullscreenchange", updateFullscreenState);
+    };
+  }, []);
+
   // chargement runtime depuis une URL
   useEffect(() => {
     if (!engineReady) return;
@@ -425,11 +480,33 @@ export default function Viewport({
   }, [active, editorMode, runtimeMode, onPickTargetName, onClearSelection]);
 
   return (
-    <div className="viewportWrap"
+    <div ref={viewportWrapRef} className={"viewportWrap" + (fullscreenActive ? " viewportWrap--fullscreen" : "")}
          onDragOver={handleDragOver}
          onDrop={handleDrop}
     >
       <canvas ref={canvasRef} className="viewportCanvas" />
+
+      {mobileMode && !runtimeMode && (
+        <div className="viewportMobileTopbar">
+          <button
+            type="button"
+            className={
+              "runtime-mobileHud__utilityBtn" +
+              (fullscreenActive ? " is-active" : "")
+            }
+            onClick={handleToggleFullscreen}
+            aria-pressed={fullscreenActive}
+            aria-label={fullscreenActive ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            <span className="runtime-mobileHud__fullscreenIcon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+      )}
 
       {showLoadingOverlay && (!engineReady || sceneLoading) && (
         <div className="viewportLoading">
@@ -445,9 +522,12 @@ export default function Viewport({
           showRotateHint={showRuntimeRotateHint}
           mobileMode={mobileMode}
           autoRunEnabled={runtimeAutoRun}
+          fullscreenActive={fullscreenActive}
           onMove={handleRuntimeMove}
           onMoveEnd={handleRuntimeMoveEnd}
+          onLook={handleRuntimeLook}
           onJump={handleRuntimeJump}
+          onToggleFullscreen={handleToggleFullscreen}
           onToggleAutoRun={handleRuntimeAutoRunToggle}
         />
       )}

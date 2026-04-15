@@ -184,7 +184,9 @@ export default function App() {
         ? null
         : activeTab;
   const shouldMountViewport =
-    hasOpenedViewport || runtimeMode || runtimeLaunchPending;
+    noViewportMode
+      ? runtimeMode || runtimeLaunchPending
+      : hasOpenedViewport || runtimeMode || runtimeLaunchPending;
   const showRuntimeRotateHint =
     runtimeMode && isMobileLayout && isPortraitOrientation;
 

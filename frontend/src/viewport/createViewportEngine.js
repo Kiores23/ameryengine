@@ -74,10 +74,27 @@ export async function createViewportEngine(canvas) {
   };
   controls.target.set(0, 1, 0);
   state.controls = controls;
+  let controlsInteractionActive = false;
 
   function syncViewerFocusFromWheel() {
     if (isEditorMode || runtimeController.isActive()) return;
     syncFocusWithCamera(state, camera, controls);
+  }
+
+  function syncViewerFocusFromControls() {
+    if (!controlsInteractionActive) return;
+    if (isEditorMode || runtimeController.isActive()) return;
+    syncFocusWithCamera(state, camera, controls);
+  }
+
+  function handleControlsStart() {
+    controlsInteractionActive = true;
+    syncViewerFocusFromControls();
+  }
+
+  function handleControlsEnd() {
+    syncViewerFocusFromControls();
+    controlsInteractionActive = false;
   }
 
   await setupScene({
@@ -122,6 +139,9 @@ export async function createViewportEngine(canvas) {
   let pointLightCullingController = null;
 
   dom.addEventListener("wheel", syncViewerFocusFromWheel, { passive: true });
+  controls.addEventListener("start", handleControlsStart);
+  controls.addEventListener("change", syncViewerFocusFromControls);
+  controls.addEventListener("end", handleControlsEnd);
 
   const autoRotateController = createAutoRotateController({
     camera,
@@ -539,6 +559,10 @@ export async function createViewportEngine(canvas) {
       return runtimeController.triggerJump();
     },
 
+    applyRuntimeLookDelta(deltaX, deltaY) {
+      runtimeController.applyLookDelta(deltaX, deltaY);
+    },
+
     setEditorMode(value) {
       applyEditorMode(value);
     },
@@ -574,6 +598,9 @@ export async function createViewportEngine(canvas) {
 
       transformControlsController.dispose();
       dom.removeEventListener("wheel", syncViewerFocusFromWheel);
+      controls.removeEventListener("start", handleControlsStart);
+      controls.removeEventListener("change", syncViewerFocusFromControls);
+      controls.removeEventListener("end", handleControlsEnd);
       controls.dispose();
 
       clearRuntimeObjects(scene, state.objectsByName);
